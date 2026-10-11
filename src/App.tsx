@@ -289,7 +289,7 @@ export default function App() {
             lang={lang}
             previous={lessons[index - 1]?.id}
             next={lessons[index + 1]?.id}
-            motion={motion}
+            motion={motion && !menu}
           />
         ) : !route ? (
           <Home lang={lang} />
