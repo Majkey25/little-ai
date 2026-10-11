@@ -155,15 +155,3 @@ export function retrieve(
     .map((d) => ({ ...d, score: cosine(query, d.vector) }))
     .sort((a, b) => b.score - a.score);
 }
-
-export function parseProgress(input: unknown, knownIds: string[]): string[] {
-  return Array.isArray(input)
-    ? [
-        ...new Set(
-          input.filter(
-            (x): x is string => typeof x === "string" && knownIds.includes(x),
-          ),
-        ),
-      ]
-    : [];
-}

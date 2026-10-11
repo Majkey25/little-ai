@@ -9,103 +9,147 @@ import {
 import { Arrow, Icon } from "./components";
 import { Demo } from "./demos";
 
+const sceneMilliseconds = 6000;
+
 export function Lesson({
   lesson,
   lang,
-  completed,
-  onComplete,
   previous,
   next,
   motion,
 }: {
   lesson: LessonData;
   lang: Lang;
-  completed: boolean;
-  onComplete: () => void;
   previous?: string;
   next?: string;
   motion: boolean;
 }) {
   const [step, setStep] = useState(0);
   const [playing, setPlaying] = useState(false);
-  const [choice, setChoice] = useState<number | null>(null);
+  const last = lesson.scenes.length - 1;
+  const active = playing && motion;
+  const pause = () => setPlaying(false);
+  const show = (scene: number) => {
+    setStep(scene);
+    setPlaying(false);
+  };
   useEffect(() => {
-    if (!playing || !motion) return;
-    const timer = window.setInterval(
-      () => setStep((current) => (current + 1) % 3),
-      6000,
-    );
-    return () => window.clearInterval(timer);
-  }, [playing, motion]);
+    if (!motion) setPlaying(false);
+  }, [motion]);
+  useEffect(() => {
+    if (!active) return;
+    const hide = () => {
+      if (document.hidden) setPlaying(false);
+    };
+    const timer = window.setTimeout(() => {
+      setStep(step + 1);
+      if (step + 1 >= last) setPlaying(false);
+    }, sceneMilliseconds);
+    document.addEventListener("visibilitychange", hide);
+    return () => {
+      window.clearTimeout(timer);
+      document.removeEventListener("visibilitychange", hide);
+    };
+  }, [active, step, last]);
   return (
     <article className="lesson-page">
-      <div className="lesson-heading">
-        <h1>{text(lesson.title, lang)}</h1>
-        <p className="intro">{text(lesson.intro, lang)}</p>
+      <h1 className="lesson-title">
+        <span className={`chapter-icon color-${lesson.group}`}>
+          <Icon name={lesson.id} />
+        </span>
+        {text(lesson.name, lang)}
+      </h1>
+      <div
+        className="lesson-stage"
+        onPointerDown={pause}
+        onFocusCapture={pause}
+        onClick={pause}
+        onInput={pause}
+        onKeyDown={(event) => {
+          if (event.key !== "Tab") pause();
+        }}
+      >
+        <Demo id={lesson.id} lang={lang} step={step} motion={motion} />
       </div>
-      <div className="story-nav">
+      <p className="scene-caption" aria-live={active ? "off" : "polite"}>
+        <span key={step}>{text(lesson.scenes[step].body, lang)}</span>
+      </p>
+      <div className="transport">
+        <div className="transport-buttons">
+          <button
+            className="small-button"
+            disabled={step === 0}
+            onClick={() => show(step - 1)}
+          >
+            <Arrow back />
+            <span className="control-label">
+              {text(l("Previous", "Předchozí"), lang)}
+            </span>
+          </button>
+          <button
+            className="play-button"
+            disabled={!motion}
+            onClick={() => {
+              if (!active && step === last) setStep(0);
+              setPlaying(!active);
+            }}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              {active ? (
+                <path d="M3 2h3v12H3zm7 0h3v12h-3Z" />
+              ) : (
+                <path d="M4 2l9 6-9 6Z" />
+              )}
+            </svg>
+            {text(active ? l("Pause", "Pozastav") : l("Play", "Přehraj"), lang)}
+          </button>
+          <button
+            className="small-button"
+            onClick={() => show(step === last ? 0 : step + 1)}
+          >
+            <span className="control-label">
+              {text(
+                step === last
+                  ? l("Start over", "Od začátku")
+                  : l("Next", "Další"),
+                lang,
+              )}
+            </span>
+            <Arrow back={step === last} />
+          </button>
+        </div>
         <div
-          className="story-tabs"
-          aria-label={text(l("Explanation steps", "Kroky vysvětlení"), lang)}
+          role="group"
+          className="scene-picker"
+          aria-label={text(l("Scenes", "Scény"), lang)}
         >
           {lesson.scenes.map((scene, i) => (
             <button
               key={i}
-              aria-pressed={step === i}
-              className={step === i ? "active" : i < step ? "seen" : ""}
-              onClick={() => {
-                setStep(i);
-                setPlaying(false);
-              }}
+              aria-label={`${text(l("Scene", "Scéna"), lang)} ${i + 1}: ${text(scene.title, lang)}`}
+              aria-current={step === i ? "step" : undefined}
+              className={step === i ? "active" : ""}
+              onClick={() => show(i)}
             >
               <span>{i + 1}</span>
-              {text(scene.title, lang)}
+              <span className="scene-name">{text(scene.title, lang)}</span>
             </button>
           ))}
         </div>
-        <button
-          className="play-button"
-          aria-pressed={playing && motion}
-          disabled={!motion}
-          onClick={() => setPlaying(!playing)}
-        >
-          {text(
-            playing && motion
-              ? l("Pause story", "Pozastav příběh")
-              : l("Play story", "Přehraj příběh"),
-            lang,
-          )}
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            {playing && motion ? (
-              <path d="M3 2h3v12H3zm7 0h3v12h-3Z" />
-            ) : (
-              <path d="M4 2l9 6-9 6Z" />
-            )}
-          </svg>
-        </button>
       </div>
-      <p className="scene-copy" key={`${step}${lang}`}>
-        {text(lesson.scenes[step].body, lang)}
-      </p>
-      <Demo id={lesson.id} lang={lang} step={step} />
-      <div className="takeaway">
-        <span className="takeaway-icon">
-          <Icon name="reasoning" />
-        </span>
-        <p>{text(lesson.takeaway, lang)}</p>
-      </div>
-      <details className="deeper">
+      <details className="lesson-details">
         <summary>
           <Icon name="sources" />
-          {text(l("A little deeper", "Trochu hlouběji"), lang)}
+          {text(l("Details & sources", "Podrobnosti a zdroje"), lang)}
           <span>+</span>
         </summary>
+        <p className="detail-lead">{text(lesson.intro, lang)}</p>
         <div className="detail-content">
           {lesson.details.map((detail) => (
             <section key={detail.title.en}>
@@ -113,92 +157,45 @@ export function Lesson({
               <p>{text(detail.body, lang)}</p>
             </section>
           ))}
+          <section>
+            <h3>{text(l("Key idea", "Hlavní myšlenka"), lang)}</h3>
+            <p>{text(lesson.takeaway, lang)}</p>
+          </section>
         </div>
-      </details>
-      <details className="knowledge-check">
-        <summary>
-          {text(l("One quick check", "Jedna krátká otázka"), lang)}
-          <span>+</span>
-        </summary>
-        <div className="quiz">
-          <h3>{text(lesson.question, lang)}</h3>
-          <div className="quiz-choices">
-            {lesson.choices.map((item, i) => (
-              <button
-                key={i}
-                onClick={() => setChoice(i)}
-                className={
-                  choice === i
-                    ? i === lesson.answer
-                      ? "correct"
-                      : "incorrect"
-                    : ""
-                }
+        <div className="lesson-sources">
+          <span>{text(l("Sources", "Zdroje"), lang)}</span>
+          {sources
+            .filter((source) => lesson.sources.includes(source.id))
+            .map((source) => (
+              <a
+                key={source.id}
+                href={source.url}
+                target="_blank"
+                rel="noreferrer"
               >
-                {text(item, lang)}
-              </button>
+                {source.title}
+              </a>
             ))}
-          </div>
-          {choice !== null && (
-            <p role="status">
-              {text(
-                choice === lesson.answer
-                  ? l("Yes. ", "Ano. ")
-                  : l("Try another idea. ", "Zkus jinou možnost. "),
-                lang,
-              )}
-              {text(lesson.explanation, lang)}
-            </p>
-          )}
         </div>
       </details>
-      <div className="lesson-sources">
-        <span>
-          {text(l("Sources", "Zdroje"), lang)}
-        </span>
-        {sources
-          .filter((source) => lesson.sources.includes(source.id))
-          .map((source) => (
-            <a
-              key={source.id}
-              href={source.url}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {source.title}
-            </a>
-          ))}
-      </div>
       <nav
         className="lesson-footer"
-        aria-label={text(l("Lesson navigation", "Navigace lekce"), lang)}
+        aria-label={text(l("Chapter navigation", "Navigace kapitol"), lang)}
       >
         <a className="secondary" href={`#/${previous ?? "chapters"}`}>
           <Arrow back />
           {text(
             previous
-              ? l("Previous", "Předchozí")
+              ? l("Previous chapter", "Předchozí kapitola")
               : l("All chapters", "Všechny kapitoly"),
             lang,
           )}
         </a>
-        <button
-          className={`complete-button ${completed ? "completed" : ""}`}
-          onClick={onComplete}
-        >
-          {completed ? "✓ " : ""}
-          {text(
-            completed
-              ? l("Marked complete", "Označeno za dokončené")
-              : l("Mark complete", "Označit za dokončené"),
-            lang,
-          )}
-        </button>
-        <a className="primary" href={`#/${next ?? "progress"}`}>
+        <a className="primary" href={`#/${next ?? "chapters"}`}>
           {text(
             next
-              ? l("Next lesson", "Další lekce")
-              : l("Your progress", "Tvůj postup"),
+              ? l("Next chapter", "Další kapitola")
+              : l("All chapters", "Všechny kapitoly"),
             lang,
           )}
           <Arrow />

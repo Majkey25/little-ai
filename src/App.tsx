@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
-import { groups, l, lessons, text, type Lang } from "./content";
-import { parseProgress } from "./math";
+import { useEffect, useRef, useState } from "react";
+import { l, lessons, text, type Lang } from "./content";
 import { Icon, Star } from "./components";
-import { Home, CourseMap, Progress, Library, GamePage } from "./Pages";
+import { Home, CourseMap, Library, GamePage } from "./Pages";
 import { Lesson } from "./Lesson";
+
+const reducedMotionQuery = "(prefers-reduced-motion: reduce)";
 
 function initialLanguage(): Lang {
   const supplied = new URLSearchParams(window.location.search).get("lang");
@@ -14,16 +15,6 @@ function initialLanguage(): Lang {
     return "en";
   }
 }
-function initialProgress(): string[] {
-  try {
-    return parseProgress(
-      JSON.parse(localStorage.getItem("little-ai-progress") ?? "[]"),
-      lessons.map((lesson) => lesson.id),
-    );
-  } catch {
-    return [];
-  }
-}
 function routeFromHash(): string {
   return window.location.hash.replace(/^#\/?/, "").split("?")[0];
 }
@@ -31,23 +22,56 @@ function routeFromHash(): string {
 export default function App() {
   const [lang, setLang] = useState<Lang>(initialLanguage);
   const [route, setRoute] = useState(routeFromHash);
-  const [completed, setCompleted] = useState(initialProgress);
   const [menu, setMenu] = useState(false);
   const [storageError, setStorageError] = useState(false);
   const [motion, setMotion] = useState(
-    () => !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    () => !window.matchMedia(reducedMotionQuery).matches,
   );
+  const picker = useRef<HTMLDivElement>(null);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const previousRoute = useRef(route);
   const lesson = lessons.find((item) => item.id === route);
   const index = lessons.findIndex((item) => item.id === route);
+  const closeMenu = () => {
+    setMenu(false);
+  };
+  const chooseLanguage = (next: Lang) => {
+    setLang(next);
+    // An explicit choice must survive reloads of a ?lang= link.
+    const url = new URL(window.location.href);
+    if (!url.searchParams.has("lang")) return;
+    url.searchParams.set("lang", next);
+    window.history.replaceState(window.history.state, "", url);
+  };
   useEffect(() => {
     const update = () => {
       setRoute(routeFromHash());
+      const supplied = new URLSearchParams(window.location.search).get("lang");
+      if (supplied === "cs" || supplied === "en") setLang(supplied);
       setMenu(false);
       window.scrollTo(0, 0);
     };
     window.addEventListener("hashchange", update);
-    return () => window.removeEventListener("hashchange", update);
+    window.addEventListener("popstate", update);
+    return () => {
+      window.removeEventListener("hashchange", update);
+      window.removeEventListener("popstate", update);
+    };
   }, []);
+  useEffect(() => {
+    // Turning the system preference off must not override a manual motion-off choice.
+    const query = window.matchMedia(reducedMotionQuery);
+    const update = () => {
+      if (query.matches) setMotion(false);
+    };
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+  useEffect(() => {
+    if (previousRoute.current === route) return;
+    previousRoute.current = route;
+    document.getElementById("main")?.focus({ preventScroll: true });
+  }, [route]);
   useEffect(() => {
     document.documentElement.lang = lang;
     document.title = lesson
@@ -55,32 +79,49 @@ export default function App() {
       : `Little AI · ${text(l("How AI works", "Jak funguje AI"), lang)}`;
     try {
       localStorage.setItem("little-ai-language", lang);
-      localStorage.setItem("little-ai-progress", JSON.stringify(completed));
     } catch {
       setStorageError(true);
     }
-  }, [lang, completed, lesson]);
+  }, [lang, lesson]);
   useEffect(() => {
+    if (!menu) return;
     const close = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenu(false);
+      if (event.key === "Escape") {
+        setMenu(false);
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const controls = picker.current?.querySelectorAll<HTMLElement>(
+        "a[href], button:not([disabled])",
+      );
+      if (!controls?.length) return;
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      if (
+        !picker.current?.contains(document.activeElement) ||
+        (event.shiftKey && document.activeElement === first) ||
+        (!event.shiftKey && document.activeElement === last)
+      ) {
+        event.preventDefault();
+        (event.shiftKey ? last : first).focus();
+      }
     };
     window.addEventListener("keydown", close);
-    return () => window.removeEventListener("keydown", close);
-  }, []);
-  const title = lesson
-    ? `${text(groups[lesson.group], lang)} / ${text(lesson.name, lang)}`
-    : route === "sources"
-      ? text(l("Source library", "Knihovna zdrojů"), lang)
-      : route === "progress"
-        ? text(l("Your progress", "Tvůj postup"), lang)
-        : route === "game"
-          ? "Little Clip Factory"
-          : text(l("Course", "Kurz"), lang);
+    (
+      picker.current?.querySelector<HTMLElement>('[aria-current="page"]') ??
+      picker.current?.querySelector("a")
+    )?.focus();
+    return () => {
+      window.removeEventListener("keydown", close);
+      menuButton.current?.focus();
+    };
+  }, [menu]);
   return (
     <div className={`app ${motion ? "" : "motion-off"}`}>
       <a
         className="skip-link"
         href="#main"
+        inert={menu}
         onClick={(event) => {
           event.preventDefault();
           document.getElementById("main")?.focus();
@@ -88,222 +129,201 @@ export default function App() {
       >
         {text(l("Skip to content", "Přejít k obsahu"), lang)}
       </a>
-      {menu && (
-        <button
-          className="menu-backdrop"
-          aria-label={text(l("Close navigation", "Zavři navigaci"), lang)}
-          onClick={() => setMenu(false)}
-        />
-      )}
-      <aside id="course-nav" className={`sidebar ${menu ? "open" : ""}`}>
-        <a className="brand" href="#/">
-          <Star />
+      <header className="topbar">
+        <a className="topbar-brand" href="#/" inert={menu}>
+          <Star size={26} />
           <span>little ai</span>
         </a>
-        <nav aria-label={text(l("Course chapters", "Kapitoly kurzu"), lang)}>
-          <div className="main-links">
-            <a
-              className={!route || route === "chapters" ? "active" : ""}
-              href="#/"
-            >
-              <Icon name="home" />
-              {text(l("Course", "Kurz"), lang)}
-            </a>
-            <a
-              className={route === "progress" ? "active" : ""}
-              href="#/progress"
-            >
-              <Icon name="progress" />
-              {text(l("Your progress", "Tvůj postup"), lang)}
-            </a>
-          </div>
-          {groups.map((group, i) => (
-            <div className="nav-group" key={i}>
-              <p>
-                <span>{String(i + 1).padStart(2, "0")}</span>
-                {text(group, lang)}
-              </p>
-              {lessons
-                .filter((item) => item.group === i)
-                .map((item) => (
-                  <a
-                    className={route === item.id ? "active" : ""}
-                    aria-current={route === item.id ? "page" : undefined}
-                    href={`#/${item.id}`}
-                    key={item.id}
-                  >
-                    <span className={`nav-icon color-${i}`}>
-                      <Icon name={item.id} />
-                    </span>
-                    {text(item.name, lang)}
-                    {completed.includes(item.id) && (
-                      <span className="nav-done">✓</span>
-                    )}
-                  </a>
-                ))}
-            </div>
-          ))}
-          <div className="sidebar-footer">
-            <a className={route === "sources" ? "active" : ""} href="#/sources">
-              <Icon name="sources" />
-              {text(l("Source library", "Knihovna zdrojů"), lang)}
-            </a>
-            <a className={route === "game" ? "active" : ""} href="#/game">
-              <Icon name="ai" />
-              Little Clip Factory
-            </a>
-            <div className="sidebar-progress">
-              <span>
-                {completed.length} / {lessons.length}
-              </span>
-              <div>
-                <i
-                  style={{
-                    width: `${(completed.length / lessons.length) * 100}%`,
-                  }}
-                />
-              </div>
-            </div>
-            <a
-              className="github-link"
-              href="https://github.com/Majkey25/little-ai"
-              target="_blank"
-              rel="noreferrer"
-            >
-              {text(
-                l("Source code on GitHub", "Zdrojový kód na GitHubu"),
-                lang,
-              )}
-            </a>
-          </div>
-        </nav>
-      </aside>
-      <div className="main-shell">
-        <header className="topbar">
-          <button
-            className="menu-button"
-            aria-expanded={menu}
-            aria-controls="course-nav"
-            onClick={() => setMenu(!menu)}
-            aria-label={text(
-              l("Open course navigation", "Otevři navigaci kurzu"),
-              lang,
-            )}
+        <button
+          ref={menuButton}
+          inert={menu}
+          className="menu-button"
+          aria-expanded={menu}
+          aria-controls="chapter-picker"
+          onClick={() => setMenu(!menu)}
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="2"
+            aria-hidden="true"
           >
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-              aria-hidden="true"
-            >
-              <path d="M3 6h18M3 12h18M3 18h18" />
-            </svg>
-          </button>
-          <span className="breadcrumb">{title}</span>
-          <div className="header-controls">
-            <button
-              className={`motion-button ${motion ? "on" : ""}`}
-              aria-pressed={motion}
-              onClick={() => setMotion(!motion)}
-            >
+            <path d="M3 6h18M3 12h18M3 18h18" />
+          </svg>
+          <span className="control-label">
+            {text(l("Chapters", "Kapitoly"), lang)}
+          </span>
+        </button>
+        <div className="header-controls" inert={menu}>
+          <button
+            className={`motion-button ${motion ? "on" : ""}`}
+            aria-pressed={motion}
+            onClick={() => setMotion(!motion)}
+          >
+            <span className="control-label">
               {text(
                 motion
                   ? l("Animations on", "Animace zapnuté")
                   : l("Animations off", "Animace vypnuté"),
                 lang,
               )}
-            </button>
-            <div
-              className="language-switch"
-              aria-label={text(l("Language", "Jazyk"), lang)}
+            </span>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              aria-hidden="true"
             >
-              <button
-                aria-pressed={lang === "en"}
-                className={lang === "en" ? "selected" : ""}
-                onClick={() => setLang("en")}
-              >
-                EN
-              </button>
-              <button
-                aria-pressed={lang === "cs"}
-                className={lang === "cs" ? "selected" : ""}
-                onClick={() => setLang("cs")}
-              >
-                CZ
-              </button>
-            </div>
+              <path d="M3 9q3-4 6 0t6 0 6 0M3 16q3-4 6 0t6 0 6 0" />
+            </svg>
+          </button>
+          <div
+            role="group"
+            className="language-switch"
+            aria-label={text(l("Language", "Jazyk"), lang)}
+          >
+            <button
+              aria-pressed={lang === "en"}
+              className={lang === "en" ? "selected" : ""}
+              onClick={() => chooseLanguage("en")}
+            >
+              EN
+            </button>
+            <button
+              aria-pressed={lang === "cs"}
+              className={lang === "cs" ? "selected" : ""}
+              onClick={() => chooseLanguage("cs")}
+            >
+              CZ
+            </button>
           </div>
-        </header>
-        <main id="main" className="main-content" tabIndex={-1} key={route}>
-          {storageError && (
-            <p className="storage-message" role="status">
+        </div>
+      </header>
+      {menu && (
+        <>
+          <button
+            className="menu-backdrop"
+            tabIndex={-1}
+            aria-label={text(l("Close chapters", "Zavři kapitoly"), lang)}
+            onClick={closeMenu}
+          />
+          <div
+            id="chapter-picker"
+            ref={picker}
+            className="chapter-picker"
+            role="dialog"
+            aria-modal="true"
+            aria-label={text(l("Chapters", "Kapitoly"), lang)}
+            onClick={(event) => {
+              if (event.target instanceof Element && event.target.closest("a"))
+                closeMenu();
+            }}
+          >
+            <nav aria-label={text(l("Chapters", "Kapitoly"), lang)}>
+              <CourseMap lang={lang} current={route} />
+              <div className="picker-links">
+                <a href="#/" aria-current={!route ? "page" : undefined}>
+                  <Icon name="home" />
+                  {text(l("Home", "Úvod"), lang)}
+                </a>
+                <a
+                  href="#/sources"
+                  aria-current={route === "sources" ? "page" : undefined}
+                >
+                  <Icon name="sources" />
+                  {text(l("Source library", "Knihovna zdrojů"), lang)}
+                </a>
+                <a
+                  href="#/game"
+                  aria-current={route === "game" ? "page" : undefined}
+                >
+                  <Icon name="ai" />
+                  Little Clip Factory
+                </a>
+                <a
+                  href="https://github.com/Majkey25/little-ai"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {text(
+                    l("Source code on GitHub", "Zdrojový kód na GitHubu"),
+                    lang,
+                  )}
+                </a>
+              </div>
+            </nav>
+            <button className="small-button picker-close" onClick={closeMenu}>
+              {text(l("Close", "Zavřít"), lang)}
+            </button>
+          </div>
+        </>
+      )}
+      <main
+        id="main"
+        className="main-content"
+        tabIndex={-1}
+        key={route}
+        inert={menu}
+      >
+        {storageError && (
+          <p className="storage-message" role="status">
+            {text(
+              l(
+                "Browser storage is unavailable. Your language choice lasts only until this page closes.",
+                "Úložiště prohlížeče není dostupné. Volba jazyka vydrží jen do zavření stránky.",
+              ),
+              lang,
+            )}
+          </p>
+        )}
+        {lesson ? (
+          <Lesson
+            key={lesson.id}
+            lesson={lesson}
+            lang={lang}
+            previous={lessons[index - 1]?.id}
+            next={lessons[index + 1]?.id}
+            motion={motion}
+          />
+        ) : !route ? (
+          <Home lang={lang} />
+        ) : route === "chapters" || route === "progress" ? (
+          <CourseMap lang={lang} heading="h1" />
+        ) : route === "sources" ? (
+          <Library lang={lang} />
+        ) : route === "game" ? (
+          <GamePage lang={lang} motion={motion} />
+        ) : (
+          <div>
+            <h1>
               {text(
-                l(
-                  "Browser storage is unavailable. Your progress lasts only until this page closes.",
-                  "Úložiště prohlížeče není dostupné. Postup vydrží jen do zavření stránky.",
-                ),
+                l("This chapter wandered off.", "Tahle kapitola se zatoulala."),
                 lang,
               )}
-            </p>
-          )}
-          {lesson ? (
-            <Lesson
-              key={lesson.id}
-              lesson={lesson}
-              lang={lang}
-              completed={completed.includes(lesson.id)}
-              onComplete={() =>
-                setCompleted((current) =>
-                  current.includes(lesson.id)
-                    ? current
-                    : [...current, lesson.id],
-                )
-              }
-              previous={lessons[index - 1]?.id}
-              next={lessons[index + 1]?.id}
-              motion={motion}
-            />
-          ) : !route ? (
-            <Home lang={lang} completed={completed} />
-          ) : route === "chapters" ? (
-            <CourseMap lang={lang} completed={completed} />
-          ) : route === "progress" ? (
-            <Progress lang={lang} completed={completed} />
-          ) : route === "sources" ? (
-            <Library lang={lang} />
-          ) : route === "game" ? (
-            <GamePage lang={lang} motion={motion} />
-          ) : (
-            <div>
-              <h1>
-                {text(
-                  l(
-                    "This chapter wandered off.",
-                    "Tahle kapitola se zatoulala.",
-                  ),
-                  lang,
-                )}
-              </h1>
-              <a className="primary" href="#/">
-                {text(l("Back to the course", "Zpět do kurzu"), lang)}
-              </a>
-            </div>
-          )}
-        </main>
-        <footer className="site-footer">
-          little ai ·{" "}
-          {text(
-            l(
-              "Small explanations. Real sources.",
-              "Malá vysvětlení. Skutečné zdroje.",
-            ),
-            lang,
-          )}
-          <a href="#/sources">{text(l("Sources", "Zdroje"), lang)}</a>
-        </footer>
-      </div>
+            </h1>
+            <a className="primary" href="#/chapters">
+              {text(l("Show all chapters", "Ukaž všechny kapitoly"), lang)}
+            </a>
+          </div>
+        )}
+      </main>
+      <footer className="site-footer" inert={menu}>
+        little ai ·{" "}
+        {text(
+          l(
+            "Small explanations. Real sources.",
+            "Malá vysvětlení. Skutečné zdroje.",
+          ),
+          lang,
+        )}
+        <a href="#/sources">{text(l("Sources", "Zdroje"), lang)}</a>
+      </footer>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import clipbot from "./assets/clipbot.webp";
 import {
   groups,
   lessons,
@@ -10,8 +11,7 @@ import {
 } from "./content";
 import { Arrow, Icon, Network } from "./components";
 
-export function Home({ lang, completed }: { lang: Lang; completed: string[] }) {
-  const next = lessons.find((lesson) => !completed.includes(lesson.id));
+export function Home({ lang }: { lang: Lang }) {
   return (
     <div className="home-page">
       <section className="hero">
@@ -24,30 +24,20 @@ export function Home({ lang, completed }: { lang: Lang; completed: string[] }) {
           <p>
             {text(
               l(
-                "16 interactive chapters, with deeper explanations and original sources when you need them.",
-                "16 interaktivních kapitol. Podrobnosti a původní zdroje najdeš, když je potřebuješ.",
+                `${lessons.length} short interactive stories. Open any chapter, press play or change the numbers.`,
+                `${lessons.length} krátkých interaktivních příběhů. Otevři kteroukoli kapitolu, pusť si ji nebo měň čísla.`,
               ),
               lang,
             )}
           </p>
-          <div className="hero-actions">
-            <a className="primary" href={`#/${next?.id ?? "ai"}`}>
-              {text(
-                completed.length
-                  ? l("Keep exploring", "Pokračuj v objevování")
-                  : l("Start exploring", "Začni objevovat"),
-                lang,
-              )}
-              <Arrow />
-            </a>
-            <a className="secondary" href="#/chapters">
-              {text(l("Pick a chapter", "Vyber si kapitolu"), lang)}
-            </a>
-          </div>
+          <a className="primary" href={`#/${lessons[0].id}`}>
+            {text(l("Open the first chapter", "Otevři první kapitolu"), lang)}
+            <Arrow />
+          </a>
         </div>
         <Network hero lang={lang} />
       </section>
-      <CourseMap lang={lang} completed={completed} />
+      <CourseMap lang={lang} />
       <section className="game-band">
         <div>
           <h2>
@@ -74,7 +64,9 @@ export function Home({ lang, completed }: { lang: Lang; completed: string[] }) {
           </a>
         </div>
         <img
-          src="./clipbot.png"
+          src={clipbot}
+          loading="lazy"
+          decoding="async"
           alt={text(
             l(
               "Cute paperclip robot with a plant",
@@ -90,14 +82,16 @@ export function Home({ lang, completed }: { lang: Lang; completed: string[] }) {
 
 export function CourseMap({
   lang,
-  completed,
+  current,
+  heading: Heading = "h2",
 }: {
   lang: Lang;
-  completed: string[];
+  current?: string;
+  heading?: "h1" | "h2";
 }) {
   return (
     <section className="course-map">
-      <h2>{text(l("Chapters", "Kapitoly"), lang)}</h2>
+      <Heading>{text(l("Chapters", "Kapitoly"), lang)}</Heading>
       <div className="course-groups">
         {groups.map((group, i) => (
           <section key={i}>
@@ -115,6 +109,7 @@ export function CourseMap({
                     href={`#/${lesson.id}`}
                     key={lesson.id}
                     className="course-row"
+                    aria-current={current === lesson.id ? "page" : undefined}
                   >
                     <span className={`chapter-icon color-${i}`}>
                       <Icon name={lesson.id} />
@@ -123,17 +118,6 @@ export function CourseMap({
                       <strong>{text(lesson.name, lang)}</strong>
                       <small>{text(lesson.subtitle, lang)}</small>
                     </span>
-                    {completed.includes(lesson.id) && (
-                      <span
-                        className="done-mark"
-                        aria-label={text(
-                          l("Marked complete", "Označeno za dokončené"),
-                          lang,
-                        )}
-                      >
-                        ✓
-                      </span>
-                    )}
                   </a>
                 ))}
             </div>
@@ -144,68 +128,15 @@ export function CourseMap({
   );
 }
 
-export function Progress({
-  lang,
-  completed,
-}: {
-  lang: Lang;
-  completed: string[];
-}) {
-  const next = lessons.find((lesson) => !completed.includes(lesson.id));
-  return (
-    <div>
-      <h1>
-        {text(
-          l("Your progress", "Tvůj postup"),
-          lang,
-        )}
-      </h1>
-      <p className="intro">
-        {text(
-          l(
-            "Your progress stays in this browser. Mark a chapter when you feel ready to move on.",
-            "Postup zůstává v tomto prohlížeči. Označ kapitolu, když chceš pokračovat dál.",
-          ),
-          lang,
-        )}
-      </p>
-      <div className="progress-summary">
-        <strong>
-          {completed.length}
-          <span> / {lessons.length}</span>
-        </strong>
-        <p>
-          {text(
-            l("chapters marked complete", "kapitol označených za dokončené"),
-            lang,
-          )}
-        </p>
-        <div className="output-gauge">
-          <span
-            style={{ width: `${(completed.length / lessons.length) * 100}%` }}
-          />
-        </div>
-        <a className="primary" href={`#/${next?.id ?? "whole"}`}>
-          {text(
-            next
-              ? l("Continue the course", "Pokračuj v kurzu")
-              : l("Revisit the whole picture", "Zopakuj si celý obrázek"),
-            lang,
-          )}
-          <Arrow />
-        </a>
-      </div>
-      <CourseMap lang={lang} completed={completed} />
-    </div>
-  );
-}
-
 export function Library({ lang }: { lang: Lang }) {
   const [query, setQuery] = useState("");
+  const year = (source: (typeof sources)[number]) =>
+    typeof source.year === "string" ? source.year : text(source.year, lang);
+  const search = query.trim().toLocaleLowerCase();
   const visible = sources.filter((source) =>
-    `${source.id} ${source.title} ${source.author} ${source.note[lang]}`
+    `${source.id} ${source.title} ${source.author} ${year(source)} ${source.note[lang]}`
       .toLocaleLowerCase()
-      .includes(query.toLocaleLowerCase()),
+      .includes(search),
   );
   return (
     <div className="library">
@@ -218,8 +149,8 @@ export function Library({ lang }: { lang: Lang }) {
       <p className="intro">
         {text(
           l(
-            "Books, papers and documentation used in this course.",
-            "Knihy, studie a dokumentace použité v tomto kurzu.",
+            "Books, papers and documentation behind these chapters.",
+            "Knihy, studie a dokumentace, ze kterých kapitoly vycházejí.",
           ),
           lang,
         )}
@@ -264,7 +195,7 @@ export function Library({ lang }: { lang: Lang }) {
             <span>
               <strong>{source.title}</strong>
               <small>
-                {source.author} · {source.year}
+                {source.author} · {year(source)}
               </small>
               <p>{text(source.note, lang)}</p>
             </span>
@@ -312,12 +243,38 @@ export function Library({ lang }: { lang: Lang }) {
   );
 }
 
-export function GamePage({ lang, motion }: { lang: Lang; motion: boolean }) {
+function GameFrame({ url, lang }: { url: string; lang: Lang }) {
   const [ready, setReady] = useState(false);
+  return (
+    <>
+      {!ready && (
+        <p role="status">
+          {text(l("Loading the factory…", "Načítám továrnu…"), lang)}
+        </p>
+      )}
+      <iframe
+        src={url}
+        title={text(
+          l(
+            "Little Clip Factory educational game",
+            "Vzdělávací hra Little Clip Factory",
+          ),
+          lang,
+        )}
+        className="game-frame"
+        onLoad={() => setReady(true)}
+        sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+      />
+    </>
+  );
+}
+
+export function GamePage({ lang, motion }: { lang: Lang; motion: boolean }) {
   const origin = import.meta.env.DEV
     ? "http://127.0.0.1:4174/"
     : "https://Majkey25.github.io/little-clip-factory/";
-  const url = `${origin}?lang=${lang}&embed=1${motion ? "" : "&motion=off"}`;
+  const fullUrl = `${origin}?lang=${lang}${motion ? "" : "&motion=off"}`;
+  const url = `${fullUrl}&embed=1`;
   return (
     <div className="game-page">
       <div className="game-page-heading">
@@ -335,7 +292,7 @@ export function GamePage({ lang, motion }: { lang: Lang; motion: boolean }) {
         </div>
         <a
           className="secondary"
-          href={`${origin}?lang=${lang}`}
+          href={fullUrl}
           target="_blank"
           rel="noreferrer"
         >
@@ -354,31 +311,13 @@ export function GamePage({ lang, motion }: { lang: Lang; motion: boolean }) {
         </a>{" "}
         {text(
           l(
-            "by Frank Lantz, with original code and art. The game bot follows simple rules; it is not an AGI.",
-            "od Franka Lantze, s vlastním kódem a grafikou. Herní bot se řídí jednoduchými pravidly, není to AGI.",
+            "by Frank Lantz. Little Clip Factory uses its own code and art. The bot follows rules; it is not an AGI.",
+            "od Franka Lantze. Little Clip Factory má vlastní kód a grafiku. Bot se řídí pravidly, není to AGI.",
           ),
           lang,
         )}
       </p>
-      {!ready && (
-        <p role="status">
-          {text(l("Loading the factory…", "Načítám továrnu…"), lang)}
-        </p>
-      )}
-      <iframe
-        key={`${lang}${motion}`}
-        src={url}
-        title={text(
-          l(
-            "Little Clip Factory educational game",
-            "Vzdělávací hra Little Clip Factory",
-          ),
-          lang,
-        )}
-        className="game-frame"
-        onLoad={() => setReady(true)}
-        sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-      />
+      <GameFrame key={url} url={url} lang={lang} />
       <div className="game-links">
         <a href="#/alignment">
           {text(

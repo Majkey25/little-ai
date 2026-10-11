@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { l, text } from "../content";
-import { Flow, Note, type DemoProps } from "../components";
-import { retrieve, queryVectors } from "../math";
+import { Note, type DemoProps } from "../components";
+import { documents, retrieve, queryVectors } from "../math";
 
 export function RetrievalDemo({ lang, step }: DemoProps) {
   const [country, setCountry] = useState("CZ");
@@ -9,18 +9,86 @@ export function RetrievalDemo({ lang, step }: DemoProps) {
   const [filter, setFilter] = useState(false);
   const results = retrieve(country, includeCzechia, filter);
   const query = queryVectors[country];
-  return (
-    <div className="demo">
-      <Flow
-        labels={[
-          text(l("Source → chunks", "Zdroj → úryvky"), lang),
-          text(l("Embed & index", "Embedding a index"), lang),
-          text(l("Search & check", "Hledání a kontrola"), lang),
-        ]}
-        active={step}
+  const collection = documents.filter((d) => includeCzechia || d.id !== "cz");
+  const selected = results[0];
+  const supported = selected?.country === country;
+  const sourceControl = (
+    <label className="check">
+      <input
+        type="checkbox"
+        checked={includeCzechia}
+        onChange={(e) => setIncludeCzechia(e.target.checked)}
       />
-      <div className="retrieval-layout">
-        <div className="demo-controls">
+      {text(l("Include the Czech source", "Zahrnout český zdroj"), lang)}
+    </label>
+  );
+  const filterControl = (
+    <label className="check">
+      <input
+        type="checkbox"
+        checked={filter}
+        onChange={(e) => setFilter(e.target.checked)}
+      />
+      {text(l("Filter by country metadata", "Filtrovat podle metadat státu"), lang)}
+    </label>
+  );
+  return (
+    <div className={`demo retrieval-story story-beat-${step}`}>
+      <div className="story-diagram retrieval-stage">
+        {step === 0 ? (
+          <div className="source-index-stage">
+            <div className="source-stack">
+              {collection.map((d) => (
+                <div className="document" key={d.id}>
+                  <span>{d.origin}</span>
+                  <strong>{d.capital[lang] || text(l("Recipe", "Recept"), lang)}</strong>
+                </div>
+              ))}
+            </div>
+            <span className="story-arrow" aria-hidden="true">→</span>
+            <div className="index-node">
+              <span className="vector-dots" aria-hidden="true">● ● ●</span>
+              <strong>{collection.length}</strong>
+              <span>{text(l("prepared chunks in the index", "připravené úryvky v indexu"), lang)}</span>
+            </div>
+          </div>
+        ) : step === 1 ? (
+          <div className="ranked-stage">
+            <div className="question-bubble">
+              {text(l("Question vector", "Vektor otázky"), lang)} · {country}
+            </div>
+            <div className="retrieved-documents">
+              {results.length ? results.map((d, i) => (
+                <div key={d.id} className={`document ${i === 0 ? "top-document" : ""}`}>
+                  <div className="document-heading">
+                    <span>#{i + 1} · {d.capital[lang] || text(l("Recipe", "Recept"), lang)}</span>
+                    <strong>{d.score.toFixed(4)}</strong>
+                  </div>
+                  <div className="document-score">
+                    <span style={{ width: `${Math.max(0, d.score) * 100}%` }} />
+                  </div>
+                </div>
+              )) : <div className="empty-state">{text(l("No matching source.", "Žádný odpovídající zdroj."), lang)}</div>}
+            </div>
+          </div>
+        ) : (
+          <div className="hallucination-flow evidence-stage">
+            <div className="question-bubble">
+              {text(l("Capital of", "Hlavní město"), lang)} · {country}
+            </div>
+            <div className="document">
+              <strong>{text(l("Top passage", "První úryvek"), lang)}</strong>
+              <p>{selected ? selected[lang] : text(l("No matching source.", "Žádný odpovídající zdroj."), lang)}</p>
+            </div>
+            <div className={`answer-bubble ${supported ? "grounded" : "uncertain"}`}>
+              <strong>{text(supported ? l("Supported answer", "Podložená odpověď") : l("Evidence missing", "Chybí podklad"), lang)}</strong>
+              <p>{supported && selected ? selected.capital[lang] : text(l("The passage does not support this country. Find another source.", "Úryvek nedokládá odpověď pro tento stát. Najdi jiný zdroj."), lang)}</p>
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="story-controls inline-controls">
+        {step > 0 && (
           <label>
             {text(l("Ask about a capital", "Zeptej se na hlavní město"), lang)}
             <select
@@ -32,36 +100,16 @@ export function RetrievalDemo({ lang, step }: DemoProps) {
               <option value="DE">{text(l("Germany", "Německo"), lang)}</option>
             </select>
           </label>
-          <code className="formula">q = [{query.join(", ")}]</code>
-          <label className="check">
-            <input
-              type="checkbox"
-              checked={includeCzechia}
-              onChange={(e) => setIncludeCzechia(e.target.checked)}
-            />
-            {text(l("Include the Czech source", "Zahrnout český zdroj"), lang)}
-          </label>
-          <label className="check">
-            <input
-              type="checkbox"
-              checked={filter}
-              onChange={(e) => setFilter(e.target.checked)}
-            />
-            {text(
-              l("Filter by country metadata", "Filtrovat podle metadat státu"),
-              lang,
-            )}
-          </label>
-          <p>
-            {text(
-              l(
-                "The app embeds the query, compares vectors and passes selected text into context. The model does not browse the database by itself.",
-                "Aplikace zakóduje dotaz, porovná vektory a vloží vybraný text do kontextu. Model databázi sám neprochází.",
-              ),
-              lang,
-            )}
-          </p>
+        )}
+        {step === 0 ? sourceControl : step === 2 ? filterControl : null}
+      </div>
+      <details className="demo-details">
+        <summary>{text(l("Vectors, sources & controls", "Vektory, zdroje a ovládání"), lang)}</summary>
+        <div className="inline-controls">
+          {step > 0 && sourceControl}
+          {step < 2 && filterControl}
         </div>
+        <code className="formula">q = [{query.join(", ")}]</code>
         <div className="retrieved-documents">
           {results.length ? (
             results.map((d, i) => (
@@ -96,16 +144,14 @@ export function RetrievalDemo({ lang, step }: DemoProps) {
             </div>
           )}
         </div>
-      </div>
-      <Note>
-        {text(
-          l(
-            "Fictional files, metadata and hand-made vectors. The cosine scores are real calculations of similarity, not answer confidence. No live LLM.",
-            "Fiktivní soubory, metadata a ručně vytvořené vektory. Kosinová skóre se skutečně počítají a měří podobnost, ne jistotu odpovědi. Bez živého LLM.",
-          ),
-          lang,
-        )}
-      </Note>
+        <Note>
+          {text(l(
+            "Fictional files, metadata and hand-made 3D vectors. The cosine scores measure similarity, not answer confidence. The app passes selected evidence into context; this does not change learned weights.",
+            "Fiktivní soubory, metadata a ručně vytvořené 3D vektory. Kosinová skóre měří podobnost, ne jistotu odpovědi. Aplikace vloží vybrané podklady do kontextu; naučené váhy se tím nemění.",
+          ), lang)}
+        </Note>
+      </details>
+      <Note>{text(l("Toy collection. Real cosine calculations. No live LLM.", "Výuková sbírka. Skutečné kosinové výpočty. Bez živého LLM."), lang)}</Note>
     </div>
   );
 }
@@ -141,8 +187,8 @@ export function HallucinationsDemo({ lang, step }: DemoProps) {
           lang,
         );
   return (
-    <div className="demo">
-      <div className="hallucination-flow">
+    <div className={`demo hallucination-story story-beat-${step}`}>
+      <div className="story-diagram hallucination-flow">
         <div className="question-bubble">
           {text(
             l("What is the capital of Czechia?", "Jaké je hlavní město Česka?"),
@@ -152,21 +198,21 @@ export function HallucinationsDemo({ lang, step }: DemoProps) {
         <div className="document">
           <div className="document-heading">
             <span>
-              {text(l("Top retrieved passage", "První nalezený úryvek"), lang)}
+              {text(web && !source ? l("Prepared web source", "Připravený webový zdroj") : l("Top retrieved passage", "První nalezený úryvek"), lang)}
             </span>
-            <strong>{result.score.toFixed(4)}</strong>
           </div>
-          <p>{result[lang]}</p>
+          <p>{web && !source ? text(l("Prague is the capital of Czechia.", "Praha je hlavní město České republiky."), lang) : result[lang]}</p>
           <small>
             {text(
-              l("Fictional teaching collection", "Fiktivní výuková sbírka"),
+              web && !source ? l("Prepared result, not a live search", "Připravený výsledek, ne živé hledání") : l("Fictional teaching collection", "Fiktivní výuková sbírka"),
               lang,
             )}
           </small>
         </div>
-        <div
+        {step > 0 && <div
           className={`answer-bubble ${grounded ? "grounded" : blocked ? "uncertain" : "wrong"}`}
         >
+          {step === 2 && <span className="support-gate">{text(check ? grounded ? l("Country support found", "Podklad ke státu nalezen") : l("Country support missing", "Podklad ke státu chybí") : l("Country check is off", "Kontrola státu je vypnutá"), lang)}</span>}
           <strong>
             {text(
               grounded
@@ -178,42 +224,45 @@ export function HallucinationsDemo({ lang, step }: DemoProps) {
             )}
           </strong>
           <p>{answer}</p>
-        </div>
+        </div>}
       </div>
-      <div className="inline-controls">
-        <label className="check">
+      <div className="story-controls inline-controls">
+        {step !== 1 && <label className="check">
           <input
             type="checkbox"
             checked={source}
             onChange={(e) => setSource(e.target.checked)}
           />
           {text(l("Add Czechia source", "Přidej zdroj o Česku"), lang)}
-        </label>
-        <label className="check">
+        </label>}
+        {step > 0 && <label className="check">
           <input
             type="checkbox"
             checked={check}
             onChange={(e) => setCheck(e.target.checked)}
           />
           {text(l("Require country support", "Vyžaduj podklad ke státu"), lang)}
-        </label>
-        <button
+        </label>}
+        {step === 2 && <button
           className="secondary"
-          disabled={web}
           onClick={() => {
-            setWeb(true);
-            setCheck(true);
+            setWeb(!web);
+            if (!web) setCheck(true);
           }}
         >
           {text(
-            l(
+            web ? l("Remove prepared web source", "Odeber připravený webový zdroj") : l(
               "Inspect prepared web result",
               "Prohlédni připravený výsledek webu",
             ),
             lang,
           )}
-        </button>
+        </button>}
       </div>
+      <details className="demo-details">
+        <summary>{text(l("Source & limits", "Zdroj a omezení"), lang)}</summary>
+        <code>{result.origin} · cosine={result.score.toFixed(4)}</code>
+        <p>{result[lang]}</p>
       {web && (
         <div className="web-result">
           <strong>
@@ -243,23 +292,12 @@ export function HallucinationsDemo({ lang, step }: DemoProps) {
           </a>
         </div>
       )}
-      <Note>
-        {text(
-          l(
-            "A deliberately broken scripted answer rule shows one RAG failure. No real LLM is running.",
-            "Záměrně chybná připravená odpovědní logika ukazuje jedno selhání RAG. Žádný skutečný LLM neběží.",
-          ),
-          lang,
-        )}{" "}
-        {step === 2 &&
-          text(
-            l(
-              "A real model might still know Prague from training.",
-              "Skutečný model může Prahu znát z tréninku.",
-            ),
-            lang,
-          )}
-      </Note>
+        <Note>{text(l(
+          "Similarity does not establish truth. This deliberately broken scripted rule copies the first capital without checking its country. A real model may know Prague from training even without a database; missing retrieval does not force Paris.",
+          "Podobnost nedokazuje pravdu. Záměrně chybná připravená logika převezme první město bez kontroly státu. Skutečný model může znát Prahu z tréninku i bez databáze; chybějící zdroj nenutí odpověď Paříž.",
+        ), lang)}</Note>
+      </details>
+      <Note>{text(l("Scripted RAG failure. No live LLM or web search.", "Připravená chyba RAG. Bez živého LLM a webového hledání."), lang)}</Note>
     </div>
   );
 }
@@ -270,69 +308,84 @@ export function ToolsDemo({ lang, step }: DemoProps) {
   const [operation, setOperation] = useState("multiply");
   const [status, setStatus] = useState<"idle" | "result" | "error">("idle");
   const [answer, setAnswer] = useState<number | null>(null);
-  const [error, setError] = useState("");
-  const [stage, setStage] = useState(0);
+  const [error, setError] = useState<"input" | "division" | "overflow" | null>(
+    null,
+  );
   const run = () => {
     const x = Number(a),
       y = Number(b);
-    if (
+    const invalidInput =
       !a.trim() ||
       !b.trim() ||
       !Number.isFinite(x) ||
       !Number.isFinite(y) ||
       Math.abs(x) > 1e9 ||
-      Math.abs(y) > 1e9
-    ) {
-      setStatus("error");
-      setError(
-        text(
-          l(
-            "Use finite numbers between −1 billion and 1 billion.",
-            "Použij konečná čísla mezi −1 miliardou a 1 miliardou.",
-          ),
-          lang,
-        ),
-      );
-      setStage(1);
-      return;
-    }
-    if (operation === "divide" && y === 0) {
-      setStatus("error");
-      setError(
-        text(
-          l("Division by zero is not allowed.", "Dělení nulou není povoleno."),
-          lang,
-        ),
-      );
-      setStage(1);
-      return;
-    }
+      Math.abs(y) > 1e9;
     const result =
       operation === "multiply" ? x * y : operation === "add" ? x + y : x / y;
-    setAnswer(result);
-    setStatus("result");
-    setStage(2);
+    const nextError = invalidInput
+      ? "input"
+      : operation === "divide" && y === 0
+        ? "division"
+        : !Number.isFinite(result)
+          ? "overflow"
+          : null;
+    setError(nextError);
+    setAnswer(nextError ? null : result);
+    setStatus(nextError ? "error" : "result");
   };
   const reset = () => {
     setStatus("idle");
-    setStage(0);
     setAnswer(null);
+    setError(null);
   };
   const call = {
     name: "calculate",
-    arguments: { operation, a: Number(a), b: Number(b) },
+    arguments: {
+      operation,
+      a: a.trim() ? Number(a) : null,
+      b: b.trim() ? Number(b) : null,
+    },
   };
+  const symbol = operation === "multiply" ? "×" : operation === "add" ? "+" : "÷";
   return (
-    <div className="demo">
-      <Flow
-        labels={[
-          text(l("Model proposes", "Model navrhne"), lang),
-          text(l("App validates & runs", "Aplikace ověří a spustí"), lang),
-          text(l("Result returns", "Výsledek se vrátí"), lang),
-        ]}
-        active={Math.max(step === 0 ? 0 : 1, stage)}
-      />
-      <div className="calculator-input">
+    <div className={`demo tools-story story-beat-${step}`}>
+      <div className="story-diagram tool-stage">
+        {step === 0 ? (
+          <div className="tool-call-stage">
+            <div className="tool-node">
+              <span>{text(l("Scripted call", "Připravené volání"), lang)}</span>
+              <strong>{text(l("Request", "Požadavek"), lang)}</strong>
+            </div>
+            <span className="story-arrow" aria-hidden="true">→</span>
+            <div className="tool-node">
+              <code>calculate</code>
+              <strong>{a.trim() || "?"} {symbol} {b.trim() || "?"}</strong>
+            </div>
+          </div>
+        ) : step === 1 ? (
+          <div className="tool-application-stage">
+            <span>{text(l("Application code", "Kód aplikace"), lang)}</span>
+            <strong className="tool-expression">{a.trim() || "?"} {symbol} {b.trim() || "?"}</strong>
+            <span className={status === "error" ? "warning" : ""}>{text(status === "result" ? l("Executed", "Provedeno") : status === "error" ? l("Rejected", "Odmítnuto") : l("Waiting for execution", "Čeká na spuštění"), lang)}</span>
+          </div>
+        ) : (
+          <div className="tool-return-stage">
+            <div className="tool-node">
+              <span>{text(l("Observation", "Výsledek nástroje"), lang)}</span>
+              <strong>{text(status === "result" ? l("Result ready", "Výsledek připraven") : status === "error" ? l("Tool error", "Chyba nástroje") : l("Not run yet", "Zatím nespuštěno"), lang)}</strong>
+            </div>
+            <span className="story-arrow" aria-hidden="true">→</span>
+            <div className="tool-node"><strong>{text(l("Context", "Kontext"), lang)}</strong></div>
+            <span className="story-arrow" aria-hidden="true">→</span>
+            <div className="tool-node">
+              <strong>{text(l("Model", "Model"), lang)}</strong>
+              <span>{text(l("Answer or another call", "Odpověď nebo další volání"), lang)}</span>
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="story-controls calculator-input">
         <label>
           A
           <input
@@ -373,32 +426,44 @@ export function ToolsDemo({ lang, step }: DemoProps) {
           {text(l("Execute local tool", "Spusť lokální nástroj"), lang)}
         </button>
       </div>
-      <div className="tool-panels">
-        <div>
-          <h3>
-            {text(l("Structured request", "Strukturovaný požadavek"), lang)}
-          </h3>
-          <pre>{JSON.stringify(call, null, 2)}</pre>
-        </div>
-        <div>
+      <div className="tool-observation">
           <h3>{text(l("Application result", "Výsledek aplikace"), lang)}</h3>
           {status === "result" ? (
-            <>
-              <div className="tool-result pop">{answer}</div>
-              <code>{JSON.stringify({ result: answer })}</code>
-            </>
+              <div role="status" className="tool-result pop">
+                {answer}
+              </div>
           ) : status === "error" ? (
             <p role="alert" className="warning">
-              {error}
+              {text(
+                error === "input"
+                  ? l(
+                      "Use finite numbers between −1 billion and 1 billion.",
+                      "Použij konečná čísla mezi −1 miliardou a 1 miliardou.",
+                    )
+                  : error === "division"
+                    ? l(
+                        "Division by zero is not allowed.",
+                        "Dělení nulou není povoleno.",
+                      )
+                    : l(
+                        "The result is too large. Try smaller values or a larger divisor.",
+                        "Výsledek je příliš velký. Zkus menší hodnoty nebo větší dělitel.",
+                      ),
+                lang,
+              )}
             </p>
           ) : (
             <div className="empty-state">
               {text(l("Waiting for execution.", "Čeká na spuštění."), lang)}
             </div>
           )}
-        </div>
       </div>
-      <Note>
+      <details className="demo-details">
+        <summary>{text(l("Request JSON & validation", "JSON požadavku a kontrola"), lang)}</summary>
+        <h3>{text(l("Structured request", "Strukturovaný požadavek"), lang)}</h3>
+        <pre>{JSON.stringify(call, null, 2)}</pre>
+        {status === "result" && <code>{JSON.stringify({ result: answer })}</code>}
+        <Note>
         {text(
           l(
             "The calculation is real and stays in your browser. The model call is scripted. No eval(), API key or live model.",
@@ -406,7 +471,9 @@ export function ToolsDemo({ lang, step }: DemoProps) {
           ),
           lang,
         )}
-      </Note>
+        </Note>
+      </details>
+      <Note>{text(l("Real arithmetic. Scripted call, no live LLM.", "Skutečné počty. Připravené volání, bez živého LLM."), lang)}</Note>
     </div>
   );
 }
@@ -440,15 +507,16 @@ export function ReasoningDemo({ lang, step }: DemoProps) {
           ),
   ];
   return (
-    <div className="demo reasoning-demo">
-      <div className="pencil-scene">
+    <div className={`demo reasoning-demo reasoning-story story-beat-${step}`}>
+      <div className="story-diagram reasoning-stage">
+        {step < 2 ? <div className="pencil-scene">
         <div className="pencil-boxes">
           {[0, 1, 2].map((box) => (
             <div className="pencil-box" key={box}>
               {[0, 1, 2, 3].map((pencil) => (
                 <span
                   key={pencil}
-                  className={`pencil ${visible >= 2 && box * 4 + pencil < 5 ? "sold" : ""}`}
+                  className={`pencil ${(step > 0 || visible >= 2) && box * 4 + pencil < 5 ? "sold" : ""}`}
                 />
               ))}
             </div>
@@ -463,78 +531,100 @@ export function ReasoningDemo({ lang, step }: DemoProps) {
             lang,
           )}
         </p>
+        <div className="reasoning-expression">
+          {step === 0 ? <>
+            <strong>3 × 4 {visible > 0 ? `= ${total}` : "= ?"}</strong>
+            {visible > 1 && <span>{total} − 5 = {proposed}</span>}
+          </> : <>
+            <span>{text(l("Proposed answer", "Navržená odpověď"), lang)}</span>
+            <strong>{total} − 5 = {proposed}</strong>
+          </>}
+        </div>
+      </div> : <div className="outcome-training-stage">
+        <div className="reasoning-node">
+          <span>{text(l("Proposed", "Navrženo"), lang)}</span>
+          <strong>{proposed}</strong>
+        </div>
+        <span className="story-arrow" aria-hidden="true">→</span>
+        <div className={`reasoning-node ${verified ? proposed === remaining ? "grounded" : "wrong" : "uncertain"}`}>
+          <span>{text(l("Arithmetic check", "Kontrola výpočtem"), lang)}</span>
+          <strong>{verified ? remaining : "?"}</strong>
+          <span>{text(verified ? proposed === remaining ? l("Matches", "Souhlasí") : l("Correction", "Oprava") : l("Not checked", "Neověřeno"), lang)}</span>
+        </div>
+        <span className="story-arrow" aria-hidden="true">→</span>
+        <div className="reasoning-node">
+          <strong>{text(l("Training outcome", "Výsledek pro trénink"), lang)}</strong>
+          <span>{text(verified ? l("Use checked solutions", "Použij ověřená řešení") : l("Check before using", "Před použitím ověř"), lang)}</span>
+        </div>
+      </div>}
       </div>
+      <div className="story-controls inline-controls">
+        {step === 0 ? <>
+          <button
+            className="primary"
+            disabled={visible >= 2}
+            onClick={() => setVisible(visible + 1)}
+          >
+            {text(l("Reveal a step", "Odhal krok"), lang)}
+          </button>
+          <button
+            className="small-button"
+            onClick={() => {
+              setVisible(0);
+              setVerified(false);
+            }}
+          >
+            {text(l("Replay calculations", "Znovu výpočty"), lang)}
+          </button>
+        </> : <>
+          <button
+            className="primary"
+            onClick={() => {
+              setVerified(true);
+              setVisible(3);
+            }}
+          >
+            {text(l("Check with arithmetic", "Ověř výpočtem"), lang)}
+          </button>
+          <label className="check">
+            <input
+              type="checkbox"
+              checked={mistake}
+              onChange={(e) => {
+                setMistake(e.target.checked);
+                setVerified(false);
+              }}
+            />
+            {text(l("Insert a plausible mistake", "Vlož přesvědčivou chybu"), lang)}
+          </label>
+        </>}
+      </div>
+      <p role="status" className="reasoning-check">{verified ? text(stages[2], lang) : ""}</p>
+      <details className="demo-details">
+        <summary>{text(l("Steps & limits", "Postup a omezení"), lang)}</summary>
       <ol className="reasoning-steps">
         {stages.map((line, i) => (
-          <li className={visible > i ? "visible-step" : ""} key={i}>
+          <li className={visible > i || step > 0 && i < 2 ? "visible-step" : ""} key={i}>
             <span className={`circle color-${i}`}>{i + 1}</span>
             <span>
-              {visible > i
+              {visible > i || step > 0 && i < 2
                 ? text(line, lang)
                 : text(l("Reveal the next step", "Odhal další krok"), lang)}
             </span>
           </li>
         ))}
       </ol>
-      <div className="inline-controls">
-        <button
-          className="primary"
-          disabled={visible >= 3}
-          onClick={() => setVisible(visible + 1)}
-        >
-          {text(l("Reveal a step", "Odhal krok"), lang)}
-        </button>
-        <button
-          className="secondary"
-          disabled={visible < 2}
-          onClick={() => {
-            setVerified(true);
-            setVisible(3);
-          }}
-        >
-          {text(l("Check with arithmetic", "Ověř výpočtem"), lang)}
-        </button>
-        <label className="check">
-          <input
-            type="checkbox"
-            checked={mistake}
-            onChange={(e) => {
-              setMistake(e.target.checked);
-              setVerified(false);
-            }}
-          />
-          {text(
-            l("Insert a plausible mistake", "Vlož přesvědčivou chybu"),
-            lang,
-          )}
-        </label>
-        <button
-          className="small-button"
-          onClick={() => {
-            setVisible(0);
-            setVerified(false);
-          }}
-        >
-          {text(l("Replay", "Znovu"), lang)}
-        </button>
-      </div>
       <Note>
         {text(
           l(
-            "Scripted explanation of intermediate steps. The check computes 3 × 4 − 5. This is not a real model’s hidden reasoning.",
-            "Připravená ukázka mezikroků. Kontrola vypočítá 3 × 4 − 5. Nejde o skryté uvažování skutečného modelu.",
+            "Scripted intermediate steps. The check computes 3 × 4 − 5. This is not a real model's hidden reasoning. A written explanation need not faithfully describe a model's internal computation.",
+            "Připravené mezikroky. Kontrola vypočítá 3 × 4 − 5. Nejde o skryté uvažování skutečného modelu. Napsané vysvětlení nemusí věrně popisovat vnitřní výpočet modelu.",
           ),
           lang,
-        )}{" "}
-        {step === 2 &&
-          text(
-            l(
-              "Train on verified outcomes, not convincing prose.",
-              "Uč se z ověřených výsledků, ne z přesvědčivých vět.",
-            ),
-            lang,
-          )}
+        )}
       </Note>
+      </details>
+      <Note>{text(step === 2 ? l("Training is illustrated; no model learns here.", "Trénink je znázorněn; žádný model se zde neučí.") : l("Scripted problem. Real arithmetic check.", "Připravená úloha. Skutečná kontrola výpočtem."), lang)}</Note>
     </div>
   );
 }
