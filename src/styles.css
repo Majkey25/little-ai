@@ -2166,6 +2166,7 @@ details[open] > summary > span:last-child {
     margin-bottom: 23px;
   }
   .course-groups {
+    grid-template-columns: 1fr;
     gap: 26px 15px;
   }
   .course-groups h3 {
