@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { l, text } from "../content";
-import { Flow, Note, TeachingLabel, type DemoProps } from "../components";
+import { Flow, Note, type DemoProps } from "../components";
 import { retrieve, queryVectors } from "../math";
 
 export function RetrievalDemo({ lang, step }: DemoProps) {
@@ -97,12 +97,11 @@ export function RetrievalDemo({ lang, step }: DemoProps) {
           )}
         </div>
       </div>
-      <TeachingLabel lang={lang} />
       <Note>
         {text(
           l(
-            "Sample filenames and metadata belong to this fictional collection. Scores are cosine similarity, not answer confidence.",
-            "Názvy souborů a metadata patří fiktivní sbírce. Skóre je kosinová podobnost, ne jistota odpovědi.",
+            "Fictional files, metadata and hand-made vectors. The cosine scores are real calculations of similarity, not answer confidence. No live LLM.",
+            "Fiktivní soubory, metadata a ručně vytvořené vektory. Kosinová skóre se skutečně počítají a měří podobnost, ne jistotu odpovědi. Bez živého LLM.",
           ),
           lang,
         )}

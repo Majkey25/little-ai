@@ -193,17 +193,25 @@ export function Network({
       )}
     >
       <g fill="none" stroke="#9691e8" strokeWidth="2.5">
-        {edges.map(([a, b], i) => (
-          <path
-            className="signal-path"
-            style={{
-              animationDelay: `${i * -0.3}s`,
-              opacity: 0.3 + signal * 0.7,
-            }}
-            key={i}
-            d={`M${points[a][0]} ${points[a][1]} C${points[a][0] + 80} ${points[a][1]},${points[b][0] - 80} ${points[b][1]},${points[b][0]} ${points[b][1]}`}
-          />
-        ))}
+        {edges.map(([a, b], i) => {
+          const path = `M${points[a][0]} ${points[a][1]} C${points[a][0] + 80} ${points[a][1]},${points[b][0] - 80} ${points[b][1]},${points[b][0]} ${points[b][1]}`;
+          return (
+            <g key={i}>
+              <path
+                className="signal-path"
+                style={{ opacity: 0.3 + signal * 0.7 }}
+                pathLength="100"
+                d={path}
+              />
+              <path
+                className="signal-pulse"
+                pathLength="100"
+                d={path}
+                style={{ animationDelay: `${i * -0.3}s` }}
+              />
+            </g>
+          );
+        })}
       </g>
       {points.map(([x, y], i) => (
         <g
@@ -254,15 +262,21 @@ export function Network({
         </g>
       ))}
       {hero && (
-        <g fill="#4c496c" fontSize="18" fontFamily="Nunito, sans-serif">
-          <text x="28" y="366">
-            {text(l("words", "slova"), lang)}
+        <g
+          fill="#4c496c"
+          fontSize="18"
+          fontWeight="700"
+          fontFamily="Nunito, sans-serif"
+          textAnchor="middle"
+        >
+          <text x="90" y="372">
+            {text(l("text", "text"), lang)}
           </text>
-          <text x="205" y="366">
+          <text x="245" y="372">
             {text(l("numbers", "čísla"), lang)}
           </text>
-          <text x="352" y="366">
-            {text(l("possibilities", "možnosti"), lang)}
+          <text x="405" y="372">
+            {text(l("next token", "další token"), lang)}
           </text>
         </g>
       )}

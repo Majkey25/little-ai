@@ -52,7 +52,7 @@ export function Lesson({
             <button
               key={i}
               aria-pressed={step === i}
-              className={step === i ? "active" : ""}
+              className={step === i ? "active" : i < step ? "seen" : ""}
               onClick={() => {
                 setStep(i);
                 setPlaying(false);
@@ -154,7 +154,7 @@ export function Lesson({
       </details>
       <div className="lesson-sources">
         <span>
-          {text(l("Read the originals", "Přečti si původní zdroje"), lang)}
+          {text(l("Sources", "Zdroje"), lang)}
         </span>
         {sources
           .filter((source) => lesson.sources.includes(source.id))
@@ -173,9 +173,14 @@ export function Lesson({
         className="lesson-footer"
         aria-label={text(l("Lesson navigation", "Navigace lekce"), lang)}
       >
-        <a className="secondary" href={`#/${previous ?? ""}`}>
+        <a className="secondary" href={`#/${previous ?? "chapters"}`}>
           <Arrow back />
-          {text(l("Previous", "Předchozí"), lang)}
+          {text(
+            previous
+              ? l("Previous", "Předchozí")
+              : l("All chapters", "Všechny kapitoly"),
+            lang,
+          )}
         </a>
         <button
           className={`complete-button ${completed ? "completed" : ""}`}

@@ -52,7 +52,7 @@ export default function App() {
     document.documentElement.lang = lang;
     document.title = lesson
       ? `${text(lesson.name, lang)} · Little AI`
-      : "Little AI · Big ideas. Tiny steps.";
+      : `Little AI · ${text(l("How AI works", "Jak funguje AI"), lang)}`;
     try {
       localStorage.setItem("little-ai-language", lang);
       localStorage.setItem("little-ai-progress", JSON.stringify(completed));
@@ -73,7 +73,9 @@ export default function App() {
       ? text(l("Source library", "Knihovna zdrojů"), lang)
       : route === "progress"
         ? text(l("Your progress", "Tvůj postup"), lang)
-        : text(l("Your AI field guide", "Tvůj průvodce světem AI"), lang);
+        : route === "game"
+          ? "Little Clip Factory"
+          : text(l("Course", "Kurz"), lang);
   return (
     <div className={`app ${motion ? "" : "motion-off"}`}>
       <a
@@ -168,8 +170,10 @@ export default function App() {
               target="_blank"
               rel="noreferrer"
             >
-              GitHub ·{" "}
-              {text(l("Made to explore", "Stvořeno k objevování"), lang)}
+              {text(
+                l("Source code on GitHub", "Zdrojový kód na GitHubu"),
+                lang,
+              )}
             </a>
           </div>
         </nav>
@@ -200,15 +204,14 @@ export default function App() {
           <span className="breadcrumb">{title}</span>
           <div className="header-controls">
             <button
-              className="motion-button"
-              aria-pressed={!motion}
+              className={`motion-button ${motion ? "on" : ""}`}
+              aria-pressed={motion}
               onClick={() => setMotion(!motion)}
-              title={text(l("Toggle animations", "Přepni animace"), lang)}
             >
               {text(
                 motion
-                  ? l("Motion on", "Animace zapnuté")
-                  : l("Motion off", "Animace vypnuté"),
+                  ? l("Animations on", "Animace zapnuté")
+                  : l("Animations off", "Animace vypnuté"),
                 lang,
               )}
             </button>
@@ -298,7 +301,7 @@ export default function App() {
             ),
             lang,
           )}
-          <a href="#/sources">{text(l("Read more", "Čti dál"), lang)}</a>
+          <a href="#/sources">{text(l("Sources", "Zdroje"), lang)}</a>
         </footer>
       </div>
     </div>

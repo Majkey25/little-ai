@@ -17,15 +17,15 @@ export function Home({ lang, completed }: { lang: Lang; completed: string[] }) {
       <section className="hero">
         <div>
           <h1>
-            {text(l("Big ideas.", "Velké myšlenky."), lang)}
+            {text(l("How AI works.", "Jak funguje AI."), lang)}
             <br />
-            <span>{text(l("Tiny steps.", "Malé kroky."), lang)}</span>
+            <span>{text(l("See it. Try it.", "Zkus si to."), lang)}</span>
           </h1>
           <p>
             {text(
               l(
-                "A playful, visual guide to how AI actually works.",
-                "Hravý vizuální průvodce tím, jak AI opravdu funguje.",
+                "16 interactive chapters, with deeper explanations and original sources when you need them.",
+                "16 interaktivních kapitol. Podrobnosti a původní zdroje najdeš, když je potřebuješ.",
               ),
               lang,
             )}
@@ -62,8 +62,8 @@ export function Home({ lang, completed }: { lang: Lang; completed: string[] }) {
           <p>
             {text(
               l(
-                "A little game about goals, growth and unintended consequences.",
-                "Malá hra o cílech, růstu a nečekaných důsledcích.",
+                "A short game about goals, guardrails and side effects.",
+                "Krátká hra o cílech, pojistkách a vedlejších účincích.",
               ),
               lang,
             )}
@@ -84,15 +84,6 @@ export function Home({ lang, completed }: { lang: Lang; completed: string[] }) {
           )}
         />
       </section>
-      <p className="home-note">
-        {text(
-          l(
-            "No prerequisites. Every chapter has something to move, try or reveal. Details and original sources are one click away.",
-            "Bez předchozích znalostí. V každé kapitole něco posuň, vyzkoušej nebo odhal. Detaily i původní zdroje jsou na jedno kliknutí.",
-          ),
-          lang,
-        )}
-      </p>
     </div>
   );
 }
@@ -106,12 +97,14 @@ export function CourseMap({
 }) {
   return (
     <section className="course-map">
-      <h2>{text(l("Your learning path", "Tvoje cesta poznávání"), lang)}</h2>
+      <h2>{text(l("Chapters", "Kapitoly"), lang)}</h2>
       <div className="course-groups">
         {groups.map((group, i) => (
           <section key={i}>
             <h3>
-              <span>{String(i + 1).padStart(2, "0")}</span>
+              <span className={`color-${i}`}>
+                {String(i + 1).padStart(2, "0")}
+              </span>
               {text(group, lang)}
             </h3>
             <div className="course-rows">
@@ -163,7 +156,7 @@ export function Progress({
     <div>
       <h1>
         {text(
-          l("Every little step counts.", "Každý malý krok se počítá."),
+          l("Your progress", "Tvůj postup"),
           lang,
         )}
       </h1>
@@ -218,15 +211,15 @@ export function Library({ lang }: { lang: Lang }) {
     <div className="library">
       <h1>
         {text(
-          l("Good questions. Good sources.", "Dobré otázky. Dobré zdroje."),
+          l("Sources", "Zdroje"),
           lang,
         )}
       </h1>
       <p className="intro">
         {text(
           l(
-            "The original books, papers and documentation behind this course. Start with a visual explanation; go deeper when you want.",
-            "Původní knihy, studie a dokumentace, o které se kurz opírá. Začni vizuálním vysvětlením a pak jdi do hloubky.",
+            "Books, papers and documentation used in this course.",
+            "Knihy, studie a dokumentace použité v tomto kurzu.",
           ),
           lang,
         )}
@@ -351,13 +344,7 @@ export function GamePage({ lang, motion }: { lang: Lang; motion: boolean }) {
         </a>
       </div>
       <p className="game-credit">
-        {text(
-          l(
-            "An original educational adaptation inspired by",
-            "Vlastní vzdělávací variace inspirovaná hrou",
-          ),
-          lang,
-        )}{" "}
+        {text(l("Inspired by", "Inspirováno hrou"), lang)}{" "}
         <a
           href="https://www.decisionproblem.com/paperclips/"
           target="_blank"
@@ -367,8 +354,8 @@ export function GamePage({ lang, motion }: { lang: Lang; motion: boolean }) {
         </a>{" "}
         {text(
           l(
-            "by Frank Lantz. Our own code and art, with openly acknowledged inspiration. The game bot is not AGI.",
-            "od Franka Lantze. Vlastní kód a grafika s přiznanou inspirací. Herní bot není AGI.",
+            "by Frank Lantz, with original code and art. The game bot follows simple rules; it is not an AGI.",
+            "od Franka Lantze, s vlastním kódem a grafikou. Herní bot se řídí jednoduchými pravidly, není to AGI.",
           ),
           lang,
         )}
