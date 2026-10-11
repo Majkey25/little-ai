@@ -19,7 +19,7 @@ import {
 import { useTokens } from "../useTokens";
 import type { Encoding } from "../tokenizer.worker";
 
-export function AIDemo({ lang, step }: DemoProps) {
+export function AIDemo({ lang }: DemoProps) {
   const [light, setLight] = useState(0);
   const [level, setLevel] = useState(0);
   const names = [
@@ -28,15 +28,18 @@ export function AIDemo({ lang, step }: DemoProps) {
     l("Deep learning", "Hluboké učení"),
     l("Large language models", "Velké jazykové modely"),
   ];
+  const short = ["AI", "ML", "DL", "LLM"];
+  const ring = (i: number) =>
+    `map-ring ring-${short[i].toLowerCase()} ${level === i ? "active" : ""}`;
   return (
     <div className="demo ai-demo">
       <div className="ai-map">
-        <div className="map-ring ring-ai">
+        <div className={ring(0)}>
           AI
-          <div className="map-ring ring-ml">
+          <div className={ring(1)}>
             ML
-            <div className="map-ring ring-dl">
-              DL<div className="map-ring ring-llm">LLM</div>
+            <div className={ring(2)}>
+              DL<div className={ring(3)}>LLM</div>
             </div>
           </div>
         </div>
@@ -49,9 +52,7 @@ export function AIDemo({ lang, step }: DemoProps) {
               className={level === i ? "selected" : ""}
               onClick={() => setLevel(i)}
             >
-              <span className={`circle color-${i}`}>
-                {["AI", "ML", "DL", "LLM"][i]}
-              </span>
+              <span className={`circle color-${i}`}>{short[i]}</span>
               {text(name, lang)}
             </button>
           ))}
@@ -119,8 +120,7 @@ export function AIDemo({ lang, step }: DemoProps) {
               "Vnořená mapa ukazuje větev AI s učením. Symbolická AI existuje i mimo ML.",
             ),
             lang,
-          )}{" "}
-          · {step + 1}/3
+          )}
         </Note>
       </div>
     </div>
