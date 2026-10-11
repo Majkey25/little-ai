@@ -8,7 +8,6 @@ import {
   retrieve,
   softmax,
   train,
-  parseProgress,
 } from "../src/math.ts";
 import { lessons, sources } from "../src/content.ts";
 import { tokenBytes } from "../src/tokenBytes.ts";
@@ -81,10 +80,11 @@ test("both real encodings preserve Czech, emoji, whitespace and literal special 
   );
 });
 
-test("every chapter has both languages and valid source links; saved progress is bounded", () => {
+test("every chapter has both languages and valid source links", () => {
   const ids = lessons.map((lesson) => lesson.id);
   const sourceIds = new Set(sources.map((source) => source.id));
-  assert.equal(new Set(ids).size, 16);
+  assert.equal(new Set(ids).size, ids.length);
+  assert.ok(ids.includes("images"));
   for (const lesson of lessons) {
     for (const value of [
       lesson.name,
@@ -95,11 +95,11 @@ test("every chapter has both languages and valid source links; saved progress is
       assert.ok(value.en.trim());
       assert.ok(value.cs.trim());
     }
-    assert.equal(lesson.scenes.length, 3);
+    assert.ok(lesson.scenes.length >= 3);
+    for (const scene of lesson.scenes) {
+      assert.ok(scene.title.en.trim() && scene.title.cs.trim());
+      assert.ok(scene.body.en.trim() && scene.body.cs.trim());
+    }
     assert.ok(lesson.sources.every((id) => sourceIds.has(id)));
   }
-  assert.deepEqual(parseProgress([ids[0], ids[0], "bad", 1, null], ids), [
-    ids[0],
-  ]);
-  assert.deepEqual(parseProgress(null, ids), []);
 });

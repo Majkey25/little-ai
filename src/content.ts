@@ -15,7 +15,7 @@ export const sources = [
     id: "slp",
     title: "Speech and Language Processing",
     author: "Daniel Jurafsky & James H. Martin",
-    year: "2026 draft",
+    year: l("2026 · draft", "2026 · pracovní verze"),
     url: "https://web.stanford.edu/~jurafsky/slp3/",
     note: l(
       "Language, tokens, neural networks and transformers.",
@@ -48,7 +48,7 @@ export const sources = [
     id: "reasonbook",
     title: "Build a Reasoning Model (From Scratch)",
     author: "Sebastian Raschka",
-    year: "Companion repository",
+    year: l("2025 · companion code", "2025 · doprovodný kód"),
     url: "https://github.com/rasbt/reasoning-from-scratch",
     note: l(
       "Inference-time compute, reinforcement learning and distillation.",
@@ -59,7 +59,7 @@ export const sources = [
     id: "aima",
     title: "Artificial Intelligence: A Modern Approach",
     author: "Stuart Russell & Peter Norvig",
-    year: "4th edition",
+    year: l("4th edition", "4. vydání"),
     url: "https://aima.cs.berkeley.edu/",
     note: l(
       "Agents, search, planning, learning and uncertainty.",
@@ -148,7 +148,7 @@ export const sources = [
     id: "agi",
     title: "Levels of AGI for Operationalizing Progress on the Path to AGI",
     author: "Morris et al.",
-    year: "2023, revised 2025",
+    year: l("2023 · revised 2025", "2023 · revize 2025"),
     url: "https://arxiv.org/abs/2311.02462",
     note: l(
       "Separate breadth, performance and autonomy.",
@@ -214,7 +214,7 @@ export const sources = [
     id: "explainer",
     title: "Transformer Explainer",
     author: "Polo Club, Georgia Tech",
-    year: "Interactive reference",
+    year: l("Interactive reference", "Interaktivní ukázka"),
     url: "https://poloclub.github.io/transformer-explainer/",
     note: l(
       "Explore a real GPT-2 model in your browser.",
@@ -225,7 +225,7 @@ export const sources = [
     id: "tiktoken",
     title: "OpenAI tiktoken",
     author: "OpenAI",
-    year: "Tokenizer implementation",
+    year: l("Tokenizer implementation", "Implementace tokenizeru"),
     url: "https://github.com/openai/tiktoken",
     note: l(
       "Byte-pair encoding and model-specific vocabularies.",
@@ -236,7 +236,7 @@ export const sources = [
     id: "minbpe",
     title: "Karpathy minbpe",
     author: "Andrej Karpathy",
-    year: "Educational implementation",
+    year: l("Educational implementation", "Výuková implementace"),
     url: "https://github.com/karpathy/minbpe",
     note: l(
       "Learn the byte-pair merge algorithm.",
@@ -247,7 +247,7 @@ export const sources = [
     id: "retrieval",
     title: "OpenAI Retrieval documentation",
     author: "OpenAI",
-    year: "Live documentation",
+    year: l("Live documentation", "Průběžně aktualizovaná dokumentace"),
     url: "https://developers.openai.com/api/docs/guides/retrieval",
     note: l(
       "Vector stores, chunks, filters and ranking.",
@@ -258,7 +258,7 @@ export const sources = [
     id: "functions",
     title: "OpenAI Function Calling documentation",
     author: "OpenAI",
-    year: "Live documentation",
+    year: l("Live documentation", "Průběžně aktualizovaná dokumentace"),
     url: "https://developers.openai.com/api/docs/guides/function-calling",
     note: l(
       "Structured tool requests and application execution.",
@@ -269,11 +269,22 @@ export const sources = [
     id: "web",
     title: "OpenAI Web Search documentation",
     author: "OpenAI",
-    year: "Live documentation",
+    year: l("Live documentation", "Průběžně aktualizovaná dokumentace"),
     url: "https://developers.openai.com/api/docs/guides/tools-web-search",
     note: l(
       "Search current sources and return citations.",
       "Hledání aktuálních zdrojů a citace.",
+    ),
+  },
+  {
+    id: "reasonapi",
+    title: "OpenAI Reasoning documentation",
+    author: "OpenAI",
+    year: l("Live documentation", "Průběžně aktualizovaná dokumentace"),
+    url: "https://developers.openai.com/api/docs/guides/reasoning",
+    note: l(
+      "Hidden reasoning tokens, context limits and output budgets.",
+      "Skryté tokeny uvažování, limity kontextu a rozpočet výstupu.",
     ),
   },
   {
@@ -291,11 +302,144 @@ export const sources = [
     id: "post",
     title: "AI-assisted software engineering",
     author: "Matěj Teplý",
-    year: "2026 · opinion / inspiration",
+    year: l("2026 · opinion / inspiration", "2026 · názor / inspirace"),
     url: "https://www.linkedin.com/posts/matejteply_ai-softwareengineering-codingagents-share-7511881119278108672-7rz-/",
     note: l(
       "The supplied post: clear contracts and evidence of completion.",
       "Dodaný příspěvek: jasné zadání a důkazy splnění.",
+    ),
+  },
+  {
+    id: "ddpm",
+    title: "Denoising Diffusion Probabilistic Models",
+    author: "Ho, Jain & Abbeel",
+    year: "2020",
+    url: "https://arxiv.org/abs/2006.11239",
+    note: l(
+      "Learning to reverse a noising process.",
+      "Učení opačného postupu k přidávání šumu.",
+    ),
+  },
+  {
+    id: "ldm",
+    title: "High-Resolution Image Synthesis with Latent Diffusion Models",
+    author: "Rombach et al.",
+    year: l("2022 · first posted 2021", "2022 · první verze 2021"),
+    url: "https://arxiv.org/abs/2112.10752",
+    note: l(
+      "Diffusion in learned features, text conditioning and decoding.",
+      "Difuze v naučených příznacích, textové podmínky a dekódování.",
+    ),
+  },
+  {
+    id: "dit",
+    title: "Scalable Diffusion Models with Transformers",
+    author: "Peebles & Xie",
+    year: l("ICCV 2023 · first posted 2022", "ICCV 2023 · první verze 2022"),
+    url: "https://arxiv.org/abs/2212.09748",
+    note: l(
+      "A Transformer predicts updates to latent image patches.",
+      "Transformer odhaduje úpravy částí latentního zápisu obrazu.",
+    ),
+  },
+  {
+    id: "cfg",
+    title: "Classifier-Free Diffusion Guidance",
+    author: "Ho & Salimans",
+    year: "2022",
+    url: "https://arxiv.org/abs/2207.12598",
+    note: l(
+      "Combining predictions with and without conditioning.",
+      "Kombinování odhadů s podmínkou a bez ní.",
+    ),
+  },
+  {
+    id: "sd3",
+    title:
+      "Scaling Rectified Flow Transformers for High-Resolution Image Synthesis",
+    author: "Esser et al.",
+    year: "2024",
+    url: "https://arxiv.org/abs/2403.03206",
+    note: l(
+      "Rectified flow and multimodal Transformer image generation.",
+      "Generování obrazu pomocí rectified flow a multimodálního Transformeru.",
+    ),
+  },
+  {
+    id: "gan",
+    title: "Generative Adversarial Networks",
+    author: "Goodfellow et al.",
+    year: "2014",
+    url: "https://arxiv.org/abs/1406.2661",
+    note: l(
+      "A generator learns against a discriminator.",
+      "Generátor se učí proti diskriminátoru.",
+    ),
+  },
+  {
+    id: "imagecard",
+    title: "Addendum to GPT-4o System Card: Native image generation",
+    author: "OpenAI",
+    year: "2025",
+    url: "https://openai.com/index/gpt-4o-image-generation-system-card-addendum/",
+    note: l(
+      "The 2025 autoregressive image system and its safety evaluations.",
+      "Autoregresní obrazový systém z roku 2025 a hodnocení jeho bezpečnosti.",
+    ),
+  },
+  {
+    id: "imageapi",
+    title: "OpenAI Image generation documentation",
+    author: "OpenAI",
+    year: l("Live documentation", "Průběžně aktualizovaná dokumentace"),
+    url: "https://developers.openai.com/api/docs/guides/image-generation",
+    note: l(
+      "Image generation, editing and remaining limitations.",
+      "Generování a úpravy obrázků i přetrvávající omezení.",
+    ),
+  },
+  {
+    id: "imageseed",
+    title: "Diffusers reproducibility documentation",
+    author: "Hugging Face",
+    year: l("Live documentation", "Průběžně aktualizovaná dokumentace"),
+    url: "https://huggingface.co/docs/diffusers/using-diffusers/reusing_seeds",
+    note: l(
+      "Seeds, generator state and reproducibility limits.",
+      "Seedy, stav generátoru a omezení opakovatelnosti.",
+    ),
+  },
+  {
+    id: "imagememory",
+    title: "Extracting Training Data from Diffusion Models",
+    author: "Carlini et al.",
+    year: "2023",
+    url: "https://arxiv.org/abs/2301.13188",
+    note: l(
+      "Memorization and reproduction can occur in image generators.",
+      "Generátory obrázků si mohou zapamatovat a reprodukovat příklady.",
+    ),
+  },
+  {
+    id: "imagebias",
+    title: "DALL·E 2 pre-training mitigations",
+    author: "OpenAI",
+    year: "2022",
+    url: "https://openai.com/index/dall-e-2-pre-training-mitigations/",
+    note: l(
+      "Training-data filtering, representation and memorization.",
+      "Filtrování tréninkových dat, zastoupení lidí a zapamatování příkladů.",
+    ),
+  },
+  {
+    id: "imageevals",
+    title: "Image Evals for Image Generation and Editing Use Cases",
+    author: "OpenAI Cookbook",
+    year: l("Live documentation", "Průběžně aktualizovaná dokumentace"),
+    url: "https://developers.openai.com/cookbook/examples/multimodal/image_evals",
+    note: l(
+      "Inspecting image details and prompt adherence.",
+      "Kontrola detailů obrázku a shody se zadáním.",
     ),
   },
 ];
@@ -309,14 +453,10 @@ export type Lesson = {
   subtitle: Localized;
   title: Localized;
   intro: Localized;
-  scenes: [Scene, Scene, Scene];
+  scenes: Scene[];
   takeaway: Localized;
   details: Detail[];
   sources: string[];
-  question: Localized;
-  choices: [Localized, Localized, Localized];
-  answer: number;
-  explanation: Localized;
 };
 const scene = (title: Localized, body: Localized): Scene => ({ title, body });
 
@@ -349,8 +489,8 @@ export const lessons: Lesson[] = [
       scene(
         l("Language", "Jazyk"),
         l(
-          "An LLM learns patterns in language. GPT means Generative Pre-trained Transformer: a model trained before you use it to generate text.",
-          "LLM se učí vzory jazyka. GPT je Generative Pre-trained Transformer: model předem natrénovaný pro generování textu.",
+          "A large language model (LLM) learns patterns in language. GPT means Generative Pre-trained Transformer: a model trained before you use it to generate text.",
+          "Velký jazykový model (LLM) se učí vzory jazyka. GPT je Generative Pre-trained Transformer: model předem natrénovaný pro generování textu.",
         ),
       ),
     ],
@@ -375,20 +515,6 @@ export const lessons: Lesson[] = [
       ),
     ],
     sources: ["aima", "slp"],
-    question: l(
-      "Does an automatic traffic light have to use machine learning?",
-      "Musí automatický semafor používat strojové učení?",
-    ),
-    choices: [
-      l("Yes, all automation is ML.", "Ano, každá automatizace je ML."),
-      l("No, it can follow fixed rules.", "Ne, může mít pevná pravidla."),
-      l("Only at night.", "Jen v noci."),
-    ],
-    answer: 1,
-    explanation: l(
-      "A state machine can do this with explicit rules and no training.",
-      "Stačí stavový automat s přesnými pravidly, bez tréninku.",
-    ),
   },
   {
     id: "neural",
@@ -405,14 +531,14 @@ export const lessons: Lesson[] = [
         l("Inputs", "Vstupy"),
         l(
           "Inputs are numbers. Here, two sliders feed a tiny neuron. Images, sound and text also need numerical representations.",
-          "Vstupy jsou čísla. Zde dvě posuvná tlačítka napájí malý neuron. I obraz, zvuk a text potřebují číselný zápis.",
+          "Vstupy jsou čísla. Dva posuvníky mění vstupy malého neuronu. I obraz, zvuk a text potřebují číselný zápis.",
         ),
       ),
       scene(
         l("Weights", "Váhy"),
         l(
-          "A weight changes how strongly an input affects the result. A bias shifts the result. Try a negative weight.",
-          "Váha určuje sílu vlivu vstupu. Bias posouvá výsledek. Zkus zápornou váhu.",
+          "A weight controls an input's influence. A bias adds a constant before activation. Training changes these numbers; ordinary generation usually keeps them fixed. Try a negative weight.",
+          "Váha určuje vliv vstupu. Posun b přičte stálou hodnotu před aktivací. Trénink mění tyto hodnoty; běžné generování je obvykle nemění. Zkus zápornou váhu.",
         ),
       ),
       scene(
@@ -438,26 +564,12 @@ export const lessons: Lesson[] = [
       scene(
         l("A parameter is a learned number", "Parametr je naučené číslo"),
         l(
-          "Weights and biases are parameters. Activations change with each input. Training changes parameters; ordinary inference usually keeps them fixed. A billion parameters does not mean a billion facts.",
-          "Váhy a biasy jsou parametry. Aktivace se mění se vstupem. Trénink mění parametry, běžná odpověď je obvykle nemění. Miliarda parametrů neznamená miliardu faktů.",
+          "Weights and biases are parameters. Activations change with each input. A billion parameters does not mean a billion facts.",
+          "Váhy a posuny jsou parametry. Aktivace se mění se vstupem. Miliarda parametrů neznamená miliardu faktů.",
         ),
       ),
     ],
     sources: ["udl", "scratch"],
-    question: l(
-      "During an ordinary answer, what usually stays fixed?",
-      "Co obvykle zůstává stejné během běžné odpovědi?",
-    ),
-    choices: [
-      l("The activations.", "Aktivace."),
-      l("The input.", "Vstup."),
-      l("The learned weights.", "Naučené váhy."),
-    ],
-    answer: 2,
-    explanation: l(
-      "The input changes activations. Training or fine-tuning changes weights.",
-      "Vstup mění aktivace. Trénink nebo dotrénování mění váhy.",
-    ),
   },
   {
     id: "learning",
@@ -503,8 +615,8 @@ export const lessons: Lesson[] = [
       scene(
         l("How an LLM trains", "Jak se trénuje LLM"),
         l(
-          "Pretraining predicts tokens in large datasets. Instruction tuning teaches useful response formats. Preference training such as RLHF or DPO shapes behavior. Fine-tuning changes weights; putting a document in a prompt does not.",
-          "Předtrénování předpovídá tokeny v rozsáhlých datech. Instrukční trénink učí užitečné odpovědi. RLHF nebo DPO upravují chování podle preferencí. Dotrénování mění váhy; dokument v promptu ne.",
+          "GPT-style pretraining learns to predict the next token; training text supplies that target. Instruction tuning trains a model to follow instructions. RLHF or DPO shapes behavior using preferences. Fine-tuning changes weights; a document in a prompt does not.",
+          "Předtrénování typu GPT učí předpovídat další token; správný výsledek dodává samotný text. Instrukční trénink učí plnit pokyny. RLHF nebo DPO upravují chování podle preferencí. Dotrénování mění váhy; dokument v promptu ne.",
         ),
       ),
       scene(
@@ -516,20 +628,6 @@ export const lessons: Lesson[] = [
       ),
     ],
     sources: ["udl", "scratch", "slp"],
-    question: l(
-      "You add a PDF to a chat. Did you retrain the model?",
-      "Přidáš PDF do chatu. Přetrénoval jsi model?",
-    ),
-    choices: [
-      l("Yes, its weights changed.", "Ano, změnily se váhy."),
-      l("No, you supplied context.", "Ne, dodal jsi kontext."),
-      l("Only if the PDF is long.", "Jen když je PDF dlouhé."),
-    ],
-    answer: 1,
-    explanation: l(
-      "A document can inform the current response without a training update.",
-      "Dokument může ovlivnit aktuální odpověď bez tréninkové změny vah.",
-    ),
   },
   {
     id: "tokens",
@@ -552,8 +650,8 @@ export const lessons: Lesson[] = [
       scene(
         l("Bytes to pieces", "Bajty na kousky"),
         l(
-          "Byte-pair encoding uses a learned list of merges to group bytes. The chosen vocabulary determines the pieces, not a count of words.",
-          "Byte-pair encoding slučuje bajty podle naučeného seznamu. Kousky určuje zvolený slovník, ne počet slov.",
+          "Byte-pair encoding merges bytes by fixed priorities learned before use. Your prompt does not retrain the vocabulary. Pieces depend on the encoding, not word count.",
+          "Byte-pair encoding slučuje bajty podle předem naučených priorit. Při zpracování tvého promptu se slovník nemění. Kousky určuje tokenizer, ne počet slov.",
         ),
       ),
       scene(
@@ -572,8 +670,8 @@ export const lessons: Lesson[] = [
       scene(
         l("Exact for what?", "Pro co je počet přesný?"),
         l(
-          "This counts plain text with cl100k_base or o200k_base using js-tiktoken. An API request also includes message formatting, tool definitions and sometimes image or audio tokens. The provider reports the authoritative usage.",
-          "Zde počítáme prostý text pomocí cl100k_base nebo o200k_base v js-tiktoken. API přidává formát zpráv, definice nástrojů a někdy obraz či zvuk. Rozhodující spotřebu uvádí poskytovatel.",
+          "This counts plain text with cl100k_base or o200k_base using js-tiktoken. These encodings split text into pattern-defined pieces, then apply BPE within each piece. An API request also includes message formatting, tool definitions and sometimes image or audio tokens. The provider reports the authoritative usage.",
+          "Zde počítáme prostý text pomocí cl100k_base nebo o200k_base v js-tiktoken. Tato kódování nejdřív rozdělí text podle vzoru na části a uvnitř každé použijí BPE. API přidává formát zpráv, definice nástrojů a někdy obraz či zvuk. Rozhodující spotřebu uvádí poskytovatel.",
         ),
       ),
       scene(
@@ -585,20 +683,6 @@ export const lessons: Lesson[] = [
       ),
     ],
     sources: ["tiktoken", "minbpe", "slp"],
-    question: l(
-      "Can the same sentence have different token counts?",
-      "Může mít stejná věta různý počet tokenů?",
-    ),
-    choices: [
-      l("Yes, with different tokenizers.", "Ano, s jinými tokenizery."),
-      l("No, a token is always a word.", "Ne, token je vždy slovo."),
-      l("Only when the meaning changes.", "Jen při změně významu."),
-    ],
-    answer: 0,
-    explanation: l(
-      "Different vocabularies can split the same bytes differently.",
-      "Různé slovníky mohou stejné bajty rozdělit jinak.",
-    ),
   },
   {
     id: "embeddings",
@@ -614,8 +698,8 @@ export const lessons: Lesson[] = [
       scene(
         l("Represent", "Zapiš"),
         l(
-          "A token embedding is a learned vector for one token ID. A retrieval model can instead encode a whole sentence or document chunk.",
-          "Tokenový embedding je naučený vektor jednoho ID. Vyhledávací model může místo toho zakódovat celou větu nebo úryvek dokumentu.",
+          "A token ID selects a vector from the model's learned embedding table. A separate retrieval model can encode a whole sentence or document chunk.",
+          "ID tokenu vybere vektor z tabulky naučených vektorů v modelu. Samostatný vyhledávací model může zakódovat větu nebo úryvek dokumentu.",
         ),
       ),
       scene(
@@ -654,20 +738,6 @@ export const lessons: Lesson[] = [
       ),
     ],
     sources: ["sbert", "attention", "explainer"],
-    question: l(
-      "A document scores 0.92. Is its answer guaranteed correct?",
-      "Dokument má skóre 0,92. Je jeho odpověď jistě správná?",
-    ),
-    choices: [
-      l("Yes, 92% certainty.", "Ano, jistota 92 %."),
-      l("No, similarity is not truth.", "Ne, podobnost není pravda."),
-      l("Yes, if it is first.", "Ano, pokud je první."),
-    ],
-    answer: 1,
-    explanation: l(
-      "Check the actual claim, entity, source and date.",
-      "Ověř konkrétní tvrzení, entitu, zdroj a datum.",
-    ),
   },
   {
     id: "attention",
@@ -684,14 +754,14 @@ export const lessons: Lesson[] = [
     ),
     scenes: [
       scene(
-        l("Query and keys", "Query a klíče"),
+        l("Query and keys", "Dotaz a klíče"),
         l(
-          "Each position creates a query, key and value. Compare a query to earlier keys using dot products. Click a word to inspect its row.",
-          "Každá pozice vytvoří query, key a value. Skalární součin porovná query s předchozími klíči. Klikni na slovo a prohlédni řádek.",
+          "Each position creates a query Q, key K and value V. Dot products compare its query with current and earlier keys. Select a word to inspect its row.",
+          "Každá pozice vytvoří dotaz Q, klíč K a hodnotu V. Skalární součiny porovnají dotaz s vlastním a předchozími klíči. Vyber slovo a prohlédni řádek.",
         ),
       ),
       scene(
-        l("Mask and normalize", "Maskuj a normalizuj"),
+        l("Hide future tokens", "Skryj budoucí tokeny"),
         l(
           "A causal mask hides future tokens. Softmax converts the remaining scores into weights summing to 1. Future positions get weight 0.",
           "Kauzální maska skryje budoucí tokeny. Softmax převede zbylá skóre na váhy se součtem 1. Budoucí pozice dostanou váhu 0.",
@@ -701,20 +771,20 @@ export const lessons: Lesson[] = [
         l("Mix values", "Smíchej hodnoty"),
         l(
           "The weighted sum of value vectors carries information to this position. Multiple heads and layers build richer representations.",
-          "Vážený součet vektorů value přenese informace do pozice. Více hlav a vrstev vytváří bohatší reprezentace.",
+          "Vážený součet hodnot V přenese informace do pozice. Více hlav a vrstev vytváří bohatší reprezentace.",
         ),
       ),
     ],
     takeaway: l(
-      "This heatmap uses small invented Q/K vectors. It does not show a real LLM’s thoughts.",
-      "Mapa používá malé vymyšlené Q/K vektory. Neukazuje myšlenky skutečného LLM.",
+      "This illustration uses small invented Q/K vectors. It does not show a real LLM's thoughts.",
+      "Schéma používá malé vymyšlené Q/K vektory. Neukazuje myšlenky skutečného LLM.",
     ),
     details: [
       scene(
         l("Inside a block", "Uvnitř bloku"),
         l(
-          "Attention(Q,K,V) = softmax(QKᵀ / √d + mask)V. A Transformer block also has a feed-forward network, normalization and residual connections. Repeated blocks refine token representations.",
-          "Attention(Q,K,V) = softmax(QKᵀ / √d + mask)V. Blok Transformeru obsahuje i dopřednou síť, normalizaci a reziduální propojení. Opakované bloky zpřesňují reprezentace tokenů.",
+          "Learned matrices turn each token representation into Q, K and V. Attention(Q,K,V) = softmax(QKᵀ / √d + mask)V mixes information between positions. A feed-forward network transforms each position. Residual connections add the input back; normalization adjusts scale. Repeated blocks update the representations.",
+          "Naučené matice převedou číselný zápis tokenu na Q, K a V. Attention(Q,K,V) = softmax(QKᵀ / √d + mask)V míchá informace mezi pozicemi. Dopředná síť zpracuje každou pozici. Reziduální spojení přičte původní vstup; normalizace upraví měřítko hodnot. Bloky se opakují.",
         ),
       ),
       scene(
@@ -726,20 +796,6 @@ export const lessons: Lesson[] = [
       ),
     ],
     sources: ["attention", "scratch", "explainer"],
-    question: l(
-      "Can causal attention read a future token during prediction?",
-      "Může kauzální attention při předpovědi číst budoucí token?",
-    ),
-    choices: [
-      l("Yes, if the model is large.", "Ano, u velkého modelu."),
-      l("No, the mask blocks it.", "Ne, maska mu to zakáže."),
-      l("Only while chatting.", "Jen během chatu."),
-    ],
-    answer: 1,
-    explanation: l(
-      "The mask prevents the model from peeking at the target token.",
-      "Maska brání nahlédnutí do tokenu, který má model teprve předpovědět.",
-    ),
   },
   {
     id: "prediction",
@@ -785,8 +841,8 @@ export const lessons: Lesson[] = [
       scene(
         l("Decoding choices", "Volby dekódování"),
         l(
-          "Greedy decoding picks the highest score. Top-k keeps k candidates; top-p keeps the smallest set reaching probability p. This example offers full sampling or greedy choice over five illustrative candidates.",
-          "Greedy dekódování vybírá nejvyšší skóre. Top-k ponechá k kandidátů; top-p nejmenší sadu s pravděpodobností p. Příklad nabízí náhodný nebo nejvyšší výběr z pěti ukázkových kandidátů.",
+          "Greedy decoding picks the highest score. Top-k keeps k candidates; top-p keeps the most likely candidates until their total probability reaches at least p. This example offers full sampling or greedy choice over five illustrative candidates.",
+          "Greedy dekódování vybírá nejvyšší skóre. Top-k ponechá k kandidátů; top-p ponechá nejpravděpodobnější kandidáty, dokud jejich součet pravděpodobností nedosáhne alespoň p. Příklad nabízí náhodný nebo nejvyšší výběr z pěti ukázkových kandidátů.",
         ),
       ),
       scene(
@@ -798,20 +854,6 @@ export const lessons: Lesson[] = [
       ),
     ],
     sources: ["slp", "scratch", "explainer"],
-    question: l(
-      "Will temperature 0 make all answers true?",
-      "Zaručí teplota 0 pravdivé odpovědi?",
-    ),
-    choices: [
-      l("Yes.", "Ano."),
-      l("Only for Czech.", "Jen pro češtinu."),
-      l("No, decoding cannot verify facts.", "Ne, dekódování neověřuje fakta."),
-    ],
-    answer: 2,
-    explanation: l(
-      "A consistently chosen wrong answer remains wrong.",
-      "Stále stejně vybíraná chybná odpověď je pořád chybná.",
-    ),
   },
   {
     id: "context",
@@ -844,8 +886,8 @@ export const lessons: Lesson[] = [
       scene(
         l("Remember carefully", "Pamatuj opatrně"),
         l(
-          "Apps may reject, truncate, summarize or retrieve when context overflows. This demo highlights overflow; it does not silently erase your notes.",
-          "Při překročení může aplikace vstup odmítnout, zkrátit, shrnout nebo dohledat. Ukázka přebytek zvýrazní, poznámky ti potichu nesmaže.",
+          "Apps can reject or shorten oversized input, summarize it, or retrieve only relevant evidence. This demo highlights overflow; it does not silently erase your notes.",
+          "Aplikace mohou příliš dlouhý vstup odmítnout, zkrátit, shrnout nebo místo něj vyhledat jen potřebné podklady. Ukázka přebytek zvýrazní, poznámky ti potichu nesmaže.",
         ),
       ),
     ],
@@ -864,29 +906,12 @@ export const lessons: Lesson[] = [
       scene(
         l("Prompts are inputs", "Prompty jsou vstupy"),
         l(
-          "A prompt can specify the task, constraints and examples. Clear boundaries help distinguish instructions from quoted data. Adding a prompt does not rewrite learned weights or give the model live internet access.",
-          "Prompt může určit úlohu, omezení a příklady. Jasné hranice odlišují instrukce od citovaných dat. Prompt nepřepisuje naučené váhy ani nezajišťuje živý přístup na internet.",
+          "A prompt can specify the task, constraints and examples. Clear boundaries help distinguish instructions from quoted data. Adding a prompt does not rewrite learned weights or give the model live internet access. Saved memory requires app storage and a way to reinsert relevant information into context.",
+          "Prompt může určit úlohu, omezení a příklady. Jasné hranice odlišují instrukce od citovaných dat. Prompt nepřepisuje naučené váhy ani nezajišťuje živý přístup na internet. Uložená paměť potřebuje úložiště aplikace a vrácení potřebných informací do kontextu.",
         ),
       ),
     ],
     sources: ["middle", "slp", "tiktoken"],
-    question: l(
-      "Is a long conversation guaranteed to remain available forever?",
-      "Je dlouhý rozhovor navždy celý dostupný modelu?",
-    ),
-    choices: [
-      l("Yes, the model remembers everything.", "Ano, model si vše pamatuje."),
-      l(
-        "No, the app must manage a limited input.",
-        "Ne, aplikace musí spravovat omezený vstup.",
-      ),
-      l("Only with more temperature.", "Jen při vyšší teplotě."),
-    ],
-    answer: 1,
-    explanation: l(
-      "Persistent memory requires app storage and a way to reinsert relevant information.",
-      "Trvalá paměť potřebuje úložiště aplikace a návrat relevantních informací do kontextu.",
-    ),
   },
   {
     id: "retrieval",
@@ -922,15 +947,15 @@ export const lessons: Lesson[] = [
       ),
     ],
     takeaway: l(
-      "A nearest neighbor always exists in a nonempty index. It may answer the wrong question.",
-      "V neprázdném indexu vždy existuje nejbližší kandidát. Může odpovídat na jinou otázku.",
+      "The top match can answer the wrong question. Filters or thresholds may leave no match.",
+      "První výsledek může odpovídat na jinou otázku. Po filtrování nebo použití prahu nemusí zůstat žádný.",
     ),
     details: [
       scene(
         l("Production retrieval", "Vyhledávání v praxi"),
         l(
-          "Use consistent embedding versions, metadata filters, hybrid keyword/vector search and reranking when needed. Approximate nearest-neighbor indexes trade speed for recall. Choose thresholds on representative questions; one universal score is not enough.",
-          "Používej shodné verze embeddingů, filtry metadat, případně kombinované hledání a přerovnání. Přibližné indexy mění rychlost za úplnost. Prahy ověř na typických otázkách; jedno univerzální skóre nestačí.",
+          "This toy compares every remaining chunk. Large indexes can search approximately for speed and miss the true nearest match. Use compatible embedding versions and metadata filters. Hybrid search combines words and vector similarity; reranking reorders candidates by relevance. Calibrate thresholds on representative questions; one universal score is not enough.",
+          "Ukázka porovná všechny zbývající úryvky. Velké indexy mohou hledat přibližně kvůli rychlosti a minout nejbližší výsledek. Používej kompatibilní verze embeddingů a filtry metadat. Kombinované hledání propojí slova s podobností vektorů; přerovnání znovu seřadí kandidáty podle relevance. Prahy ověř na otázkách ze skutečného použití; jedno univerzální skóre nestačí.",
         ),
       ),
       scene(
@@ -942,23 +967,6 @@ export const lessons: Lesson[] = [
       ),
     ],
     sources: ["rag", "retrieval", "sbert"],
-    question: l(
-      "Your Czechia question retrieves a passage about France. What next?",
-      "Otázka na Česko našla úryvek o Francii. Co dál?",
-    ),
-    choices: [
-      l("Answer Paris because it ranks first.", "Odpověz Paříž, je první."),
-      l("Increase temperature.", "Zvyš teplotu."),
-      l(
-        "Check support; abstain or find better evidence.",
-        "Ověř podklad; nepodloženě neodpovídej, nebo hledej dál.",
-      ),
-    ],
-    answer: 2,
-    explanation: l(
-      "Ranking retrieves a candidate. The application still needs evidence checks.",
-      "Pořadí určuje kandidáta. Aplikace stále potřebuje kontrolu podkladů.",
-    ),
   },
   {
     id: "hallucinations",
@@ -1017,26 +1025,6 @@ export const lessons: Lesson[] = [
       ),
     ],
     sources: ["truth", "hallucination", "rag"],
-    question: l(
-      "Does “Paris” prove that the LLM searched for the nearest word?",
-      "Dokazuje „Paříž“, že LLM hledal nejbližší slovo?",
-    ),
-    choices: [
-      l(
-        "No. Inspect the actual model and retrieval flow.",
-        "Ne. Prozkoumej skutečný průběh modelu a vyhledávání.",
-      ),
-      l("Yes, all LLMs do this.", "Ano, všechny LLM to dělají."),
-      l(
-        "It proves the model cannot learn.",
-        "Dokazuje to, že model neumí učení.",
-      ),
-    ],
-    answer: 0,
-    explanation: l(
-      "Our example isolates one possible app failure. It is not a diagnosis of an unspecified real model.",
-      "Příklad izoluje jednu možnou chybu aplikace. Není diagnózou neurčeného skutečného modelu.",
-    ),
   },
   {
     id: "tools",
@@ -1095,23 +1083,6 @@ export const lessons: Lesson[] = [
       ),
     ],
     sources: ["functions", "web", "react"],
-    question: l(
-      "Who executes a function call in this architecture?",
-      "Kdo v této architektuře spouští volání funkce?",
-    ),
-    choices: [
-      l("The token ID.", "ID tokenu."),
-      l(
-        "The application or tool runtime.",
-        "Aplikace nebo prostředí nástroje.",
-      ),
-      l("The embedding vector.", "Embeddingový vektor."),
-    ],
-    answer: 1,
-    explanation: l(
-      "The model proposes a call; the application decides whether and how to run it.",
-      "Model navrhne volání; aplikace rozhodne, zda a jak ho spustit.",
-    ),
   },
   {
     id: "reasoning",
@@ -1164,29 +1135,12 @@ export const lessons: Lesson[] = [
       scene(
         l("The trade-off", "Cena navíc"),
         l(
-          "More compute takes time and tokens. Verification can help, but an incorrect verifier can reinforce errors. Match effort to the task and measure results on representative cases. Reasoning does not imply consciousness.",
-          "Více výpočtů stojí čas a tokeny. Kontrola může pomoci, ale chybný ověřovač může chyby posílit. Úsilí přizpůsob úloze a měř výsledky. Uvažování neznamená vědomí.",
+          "More compute takes time and tokens. OpenAI's hidden reasoning tokens use context space and the output budget even when they are not visible in the answer. This guide's plain-text counter cannot count them. Verification can help, but a faulty verifier can reinforce errors. Measure results on representative cases. Reasoning does not imply consciousness.",
+          "Více výpočtů stojí čas a tokeny. Skryté tokeny uvažování u OpenAI zabírají kontext i rozpočet výstupu, i když je v odpovědi nevidíš. Naše počítadlo prostého textu je nezapočítá. Kontrola může pomoci, ale chybný ověřovač může chyby posílit. Měř výsledky na případech odpovídajících skutečnému použití. Uvažování neznamená vědomí.",
         ),
       ),
     ],
-    sources: ["cot", "react", "reasonbook"],
-    question: l(
-      "A detailed explanation sounds convincing. What proves the answer?",
-      "Podrobný postup zní přesvědčivě. Co doloží odpověď?",
-    ),
-    choices: [
-      l("Its length.", "Jeho délka."),
-      l("Its confident tone.", "Sebevědomý tón."),
-      l(
-        "Independent checks and supporting evidence.",
-        "Nezávislé kontroly a podklady.",
-      ),
-    ],
-    answer: 2,
-    explanation: l(
-      "Check the result against the task, not the style of the explanation.",
-      "Ověř výsledek podle zadání, ne podle stylu vysvětlení.",
-    ),
+    sources: ["cot", "react", "reasonbook", "reasonapi"],
   },
   {
     id: "agents",
@@ -1198,8 +1152,8 @@ export const lessons: Lesson[] = [
       "Schopný pomocník. Jak samostatný?",
     ),
     intro: l(
-      "An agent loops through observations and actions. AGI is a different question: how broad are its capabilities?",
-      "Agent opakuje pozorování a akce. AGI řeší jinou otázku: jak široké jsou jeho schopnosti?",
+      "An agent loops through observations and actions. AGI, artificial general intelligence, concerns broad capabilities across tasks.",
+      "Agent opakuje pozorování a akce. AGI, obecná umělá inteligence, označuje široké schopnosti napříč úlohami.",
     ),
     scenes: [
       scene(
@@ -1232,8 +1186,8 @@ export const lessons: Lesson[] = [
       scene(
         l("Names without magic", "Názvy bez magie"),
         l(
-          "AGI = artificial general intelligence. ASI = artificial superintelligence. These describe proposed capability categories. Neither proves consciousness, emotions or a particular arrival date. The slider is a conceptual illustration, not a real system assessment.",
-          "AGI = obecná umělá inteligence. ASI = umělá superinteligence. Jde o navrhované kategorie schopností. Nedokazují vědomí, emoce ani termín vzniku. Posuvníky jsou ilustrace, ne hodnocení skutečného systému.",
+          "AGI = artificial general intelligence. ASI = artificial superintelligence, broadly exceeding human ability. These describe proposed capability categories. Neither proves consciousness, emotions or a particular arrival date. The slider is a conceptual illustration, not a real system assessment.",
+          "AGI = obecná umělá inteligence. ASI = umělá superinteligence, která široce překonává lidské schopnosti. Jde o navrhované kategorie schopností. Nedokazují vědomí, emoce ani termín vzniku. Posuvníky jsou ilustrace, ne hodnocení skutečného systému.",
         ),
       ),
       scene(
@@ -1245,23 +1199,6 @@ export const lessons: Lesson[] = [
       ),
     ],
     sources: ["agi", "aima", "react"],
-    question: l(
-      "Does permission to run more tools make a system AGI?",
-      "Udělá oprávnění k více nástrojům ze systému AGI?",
-    ),
-    choices: [
-      l(
-        "No, autonomy and broad competence differ.",
-        "Ne, autonomie a obecné schopnosti se liší.",
-      ),
-      l("Yes, any autonomous bot is AGI.", "Ano, každý samostatný bot je AGI."),
-      l("Only with enough paperclips.", "Jen s dostatkem sponek."),
-    ],
-    answer: 0,
-    explanation: l(
-      "An automatic paperclip maker remains a narrow system.",
-      "Automatický výrobce sponek zůstává úzce zaměřeným systémem.",
-    ),
   },
   {
     id: "alignment",
@@ -1291,8 +1228,8 @@ export const lessons: Lesson[] = [
       scene(
         l("Allow correction", "Umožni opravu"),
         l(
-          "Keep shutdown and oversight available. Corrigibility means allowing correction. Our game makes the controls explicit; real alignment remains an open problem.",
-          "Zachovej možnost vypnutí a dohledu. Corrigibility znamená možnost přijmout opravu. Hra má jasná tlačítka; skutečný soulad cílů zůstává otevřenou otázkou.",
+          "Allow correction or shutdown and keep human oversight. This is corrigibility. The game enforces these controls with code; real alignment remains an open problem.",
+          "Umožni opravu i vypnutí a zachovej lidský dohled. Tomu se říká korigovatelnost. Ve hře tyto možnosti zajišťuje kód; skutečný soulad cílů zůstává otevřenou otázkou.",
         ),
       ),
     ],
@@ -1317,23 +1254,6 @@ export const lessons: Lesson[] = [
       ),
     ],
     sources: ["safety", "gaming", "ethics"],
-    question: l(
-      "What actually enforces a resource limit in the game?",
-      "Co ve hře skutečně vynucuje limit zdrojů?",
-    ),
-    choices: [
-      l("A friendly-looking robot.", "Přátelský vzhled robota."),
-      l(
-        "An implemented constraint in the action logic.",
-        "Naprogramované omezení při provádění akce.",
-      ),
-      l("A longer goal sentence alone.", "Samotná delší věta cíle."),
-    ],
-    answer: 1,
-    explanation: l(
-      "A goal description and a runtime guardrail are different mechanisms.",
-      "Popis cíle a vynucované omezení jsou různé mechanismy.",
-    ),
   },
   {
     id: "engineering",
@@ -1362,15 +1282,15 @@ export const lessons: Lesson[] = [
       scene(
         l("Verify behavior", "Ověř chování"),
         l(
-          "Builds and types catch some mistakes. Tests check behavior. Review checks design and risk. A passing mock test cannot prove a real integration works.",
-          "Build a typy najdou některé chyby. Testy kontrolují chování. Review kontroluje návrh a rizika. Test s mockem nedokazuje funkčnost skutečné integrace.",
+          "Builds and types catch some errors. Tests check behavior; code review checks design and risk. Verify the real integration too.",
+          "Sestavení a kontrola typů zachytí některé chyby. Testy ověří chování a kontrola kódu posoudí návrh i rizika. Ověř i skutečné propojení služeb.",
         ),
       ),
       scene(
         l("Ship and observe", "Nasaď a sleduj"),
         l(
-          "Deploy small changes, observe real outcomes and prepare rollback. Version control records changes. CI runs checks; CD delivers them under the chosen policy.",
-          "Nasazuj malé změny, sleduj skutečné výsledky a připrav návrat. Git eviduje změny. CI spouští kontroly; CD změny doručuje podle zvolené politiky.",
+          "Deploy small changes, observe outcomes and prepare rollback. Version control records changes. CI frequently integrates changes into shared code and runs checks. CD keeps releases ready or deploys them automatically.",
+          "Nasazuj malé změny, sleduj výsledky a připrav návrat k funkční verzi. Git eviduje změny. CI často spojuje změny do společného kódu a spouští kontroly. CD udržuje verzi připravenou k vydání nebo ji nasazuje automaticky.",
         ),
       ),
     ],
@@ -1382,15 +1302,15 @@ export const lessons: Lesson[] = [
       scene(
         l("A sustainable system", "Udržitelný systém"),
         l(
-          "Interfaces define promises between parts. Tests protect important behavior, logs explain failures, and documentation preserves decisions. Keep secrets outside code. Small changes and explicit error handling make maintenance easier.",
-          "Rozhraní určují závazky mezi částmi. Testy chrání důležité chování, logy vysvětlují chyby a dokumentace uchovává rozhodnutí. Tajné údaje nepatří do kódu. Malé změny a jasné chyby usnadňují údržbu.",
+          "Interfaces define promises between parts. Tests protect important behavior, logs explain failures, and documentation preserves decisions. Simulated-service tests do not prove the real integration works. Keep secrets outside code. If an app has a server, enforce permissions there; hiding a button is not authorization. Small changes and explicit error handling make maintenance easier.",
+          "Rozhraní určují závazky mezi částmi. Testy chrání důležité chování, logy vysvětlují chyby a dokumentace uchovává rozhodnutí. Testy s náhradou služby nedokazují skutečné propojení. Tajné údaje nepatří do kódu. Pokud má aplikace server, oprávnění vynucuj na něm; skryté tlačítko přístup nechrání. Malé změny a jasné chyby usnadňují údržbu.",
         ),
       ),
       scene(
         l("AI amplifies the team", "AI zesiluje vlastnosti týmu"),
         l(
-          "DORA’s 2025 research connects AI benefits to the surrounding organization. Its capabilities include clear AI policy, healthy data, AI-accessible internal data, version control, small batches, user focus and strong internal platforms. This is research evidence, not a universal productivity promise.",
-          "DORA 2025 spojuje přínos AI s fungováním organizace. Model zahrnuje jasnou AI politiku, kvalitní data, interní data dostupná AI, správu verzí, malé dávky, zaměření na uživatele a silné interní platformy. Nezaručuje univerzální produktivitu.",
+          "DORA’s 2025 research connects AI benefits to the surrounding organization. Its capabilities include clear AI policy, high-quality accessible data, AI-accessible internal data, strong version control practices, small batches, user focus and quality internal platforms. This is research evidence, not a universal productivity promise.",
+          "DORA 2025 spojuje přínos AI s fungováním organizace. Model zahrnuje jasnou AI politiku, kvalitní a dostupná data, interní data dostupná AI, dobrou správu verzí, malé dávky, zaměření na uživatele a kvalitní interní platformy. Nezaručuje univerzální produktivitu.",
         ),
       ),
       scene(
@@ -1402,20 +1322,123 @@ export const lessons: Lesson[] = [
       ),
     ],
     sources: ["swe", "dora", "post"],
-    question: l(
-      "The build passed. Is the user workflow proven?",
-      "Build prošel. Je tím ověřen průchod uživatele?",
+  },
+  {
+    id: "images",
+    group: 3,
+    name: l("Image generation", "Generování obrázků"),
+    subtitle: l("A prompt becomes a picture", "Ze zadání vzniká obrázek"),
+    title: l("From a prompt to a picture.", "Od zadání k obrázku."),
+    intro: l(
+      "A picture can start as noise. Follow one common approach: latent diffusion.",
+      "Obrázek může začít jako šum. Sleduj jeden běžný postup: latentní difuzi.",
     ),
-    choices: [
-      l("Yes, automatically.", "Ano, automaticky."),
-      l("No, check the actual workflow too.", "Ne, ověř i skutečný průchod."),
-      l("Only for AI-written code.", "Jen u kódu napsaného AI."),
+    scenes: [
+      scene(
+        l("Describe", "Popiš"),
+        l(
+          "A text encoder turns the prompt into numbers that guide image generation.",
+          "Textový enkodér převede zadání na čísla, která ovlivní tvorbu obrázku.",
+        ),
+      ),
+      scene(
+        l("Start with noise", "Začni šumem"),
+        l(
+          "A number called a seed sets the starting noise. Different starts can lead to different pictures.",
+          "Seed je číslo, které nastaví počáteční šum. Jiný začátek může vést k jinému obrázku.",
+        ),
+      ),
+      scene(
+        l("Refine step by step", "Zpřesňuj krok za krokem"),
+        l(
+          "A trained network predicts updates from the noisy state, prompt and noise level. Sampling applies them step by step. Learned weights stay fixed.",
+          "Natrénovaná síť odhadne úpravy podle zašuměného stavu, zadání a úrovně šumu. Zvolený postup generování je postupně provede. Naučené váhy zůstávají pevné.",
+        ),
+      ),
+      scene(
+        l("Decode the picture", "Dekóduj obrázek"),
+        l(
+          "Latent diffusion uses a compact learned representation of the image. A decoder turns it into pixels. The representation is not a tiny photograph.",
+          "Latentní difuze používá úsporný naučený číselný zápis obrazu. Dekodér jej převede na pixely. Tento zápis není malá fotografie.",
+        ),
+      ),
+      scene(
+        l("Guide and check", "Řiď a ověř"),
+        l(
+          "Guidance controls how strongly the prompt steers generation. Higher is not always better. Check the result and its intended use.",
+          "Síla řízení určuje, jak moc zadání ovlivní tvorbu. Vyšší hodnota nezaručí lepší obrázek. Ověř výsledek i zamýšlené použití.",
+        ),
+      ),
     ],
-    answer: 1,
-    explanation: l(
-      "Compilation and runtime behavior provide different evidence.",
-      "Kompilace a běhové chování poskytují různé důkazy.",
+    takeaway: l(
+      "Prompt features guide sampling. During ordinary generation, the image state changes while learned weights stay fixed.",
+      "Příznaky zadání řídí tvorbu. Při běžném generování se mění stav obrazu, naučené váhy zůstávají pevné.",
     ),
+    details: [
+      scene(
+        l("Learning and fixed weights", "Učení a pevné váhy"),
+        l(
+          "DDPM training adds Gaussian noise to images: random values following a bell-shaped distribution. A network learns to predict a correction; one common approach predicts the added noise. Generation runs a learned reverse process without a finished target image supplied. Text-image pairs teach relationships between descriptions and visual features. Generation normally keeps learned weights fixed.",
+          "Trénink DDPM přidává k obrázkům gaussovský šum: náhodné hodnoty podle zvonové křivky. Síť se učí odhadnout opravu; jeden běžný postup odhaduje přidaný šum. Generování používá naučený opačný proces bez dodaného hotového cílového obrázku. Dvojice textu a obrázku učí vztahy mezi popisem a obrazem. Generování obvykle nemění naučené váhy.",
+        ),
+      ),
+      scene(
+        l("Inside the network", "Uvnitř sítě"),
+        l(
+          "The original latent-diffusion work uses a U-Net, a network with paths that compress and expand features. Text can influence image features through cross-attention. DiT instead uses a Transformer over latent patches; its original study conditions on image classes. A Transformer can predict image updates as well as text tokens. Its architecture alone does not define its training objective.",
+          "Původní latentní difuze používá U-Net, síť s cestami pro zhušťování a rozšiřování příznaků. Text může ovlivňovat obrazové příznaky přes cross-attention. DiT místo něj používá Transformer nad částmi latentního zápisu; původní studie jej řídí třídami obrázků. Transformer může odhadovat úpravy obrazu i textové tokeny. Architektura sama neurčuje cíl tréninku.",
+        ),
+      ),
+      scene(
+        l("Guidance and steps", "Guidance a kroky"),
+        l(
+          "Classifier-free guidance combines predictions with and without conditioning. The illustrated convention is u + g × (c − u): g = 0 uses the unconditioned update, g = 1 the conditioned update, and larger values extrapolate. Interfaces can use other conventions. Strong guidance can trade diversity for prompt alignment. The sampler and noise schedule determine the updates; more steps cost time without guaranteeing a better image.",
+          "Classifier-free guidance kombinuje odhady s podmínkou a bez ní. Ukázka používá u + g × (c − u): g = 0 dává úpravu bez podmínky, g = 1 s podmínkou a vyšší hodnoty pokračují za podmíněný odhad. Rozhraní mohou používat jiné konvence. Silné řízení může vyměnit rozmanitost za shodu se zadáním. Sampler a rozvrh šumu určují úpravy; více kroků stojí čas a nezaručuje lepší obrázek.",
+        ),
+      ),
+      scene(
+        l("More than diffusion", "Více než difuze"),
+        l(
+          "Not every image model uses this route. Stable Diffusion 3 combines a multimodal Transformer with rectified flow, learning updates that move noise toward image data. OpenAI describes 4o image generation from 2025 as autoregressive: it builds a sequence using earlier outputs. GANs, generative adversarial networks, train a generator against a discriminator that learns to distinguish training images from generated ones.",
+          "Ne každý obrazový model používá tuto cestu. Stable Diffusion 3 používá rectified flow s multimodálním Transformerem a učí se posouvat šum směrem k obrazovým datům. OpenAI popisuje tvorbu obrazů ve 4o z roku 2025 jako autoregresní: vytváří posloupnost podle předchozích výstupů. GANy, generativní adversariální sítě, trénují generátor proti diskriminátoru, který se učí rozlišovat tréninkové a vygenerované obrázky.",
+        ),
+      ),
+      scene(
+        l("The toy and the seed", "Ukázka a seed"),
+        l(
+          "This toy uses uniform seeded noise and a drawn template. Each step moves 20% of the remaining distance toward that known template. It is template relaxation, not a trained model or a diffusion sampler. Changing the seed changes only the starting noise here. The feature cells and decoder are diagrams. Real models learn updates and receive no final answer image. A seed does not guarantee identical results across different models, software or hardware.",
+          "Ukázka používá rovnoměrný šum podle seedu a nakreslenou předlohu. Každý krok překoná 20 % zbývající vzdálenosti k této známé předloze. Jde o přibližování k předloze, ne natrénovaný model nebo difuzní sampler. Seed tu mění pouze počáteční šum. Příznaky a dekodér jsou schémata. Skutečný model se učí úpravy a nedostává hotový cílový obrázek. Seed nezaručuje stejný výsledek napříč modely, softwarem nebo hardwarem.",
+        ),
+      ),
+      scene(
+        l("Inspect the output", "Prohlédni výsledek"),
+        l(
+          "Check spelling, hands and body structure, object counts, layout and consistency. Errors depend on the model and task; these are inspection cues, not a claim that every output fails. Convincing pixels are not proof that an event happened.",
+          "Zkontroluj nápisy, ruce a stavbu těla, počty objektů, rozložení a konzistenci. Chyby závisí na modelu a úloze; jde o náměty ke kontrole, ne tvrzení, že každý výstup selže. Přesvědčivé pixely nedokazují, že se událost stala.",
+        ),
+      ),
+      scene(
+        l("Data, bias and creators", "Data, zkreslení a autoři"),
+        l(
+          "Data choices and filtering can shape representational bias. Generators learn patterns, but memorization and reproduction can also occur. Check image provenance, consent and applicable licenses. An AI output is not automatically cleared for every use; rights depend on the material and applicable rules.",
+          "Výběr a filtrování dat mohou ovlivnit zkreslení zobrazení lidí. Generátory se učí vzory, ale mohou si také zapamatovat a reprodukovat příklady. Ověř původ obrázku, souhlas a příslušné licence. Výstup AI není automaticky prověřený pro každé použití; práva závisí na materiálu a platných pravidlech.",
+        ),
+      ),
+    ],
+    sources: [
+      "ddpm",
+      "ldm",
+      "dit",
+      "cfg",
+      "sd3",
+      "gan",
+      "imagecard",
+      "imageapi",
+      "imageseed",
+      "imagememory",
+      "imagebias",
+      "imageevals",
+    ],
   },
   {
     id: "whole",
@@ -1470,7 +1493,7 @@ export const lessons: Lesson[] = [
         ),
       ),
       scene(
-        l("What this course can show", "Co tento kurz ukazuje"),
+        l("What this guide can show", "Co tento průvodce ukazuje"),
         l(
           "Token counts and small calculations are real. Other diagrams use labeled teaching data. No live LLM, web search or real document embedding runs here. Energy, training-data rights and social effects also depend on the deployed system and deserve separate study.",
           "Počty tokenů a malé výpočty jsou skutečné. Ostatní diagramy používají označená výuková data. Nespouštíme živý LLM, webové hledání ani skutečný dokumentový embedding. Energie, práva k datům a dopady na společnost vyžadují další studium.",
@@ -1478,23 +1501,6 @@ export const lessons: Lesson[] = [
       ),
     ],
     sources: ["slp", "scratch", "udl", "reasonbook"],
-    question: l(
-      "Which part brings fresh documents into a response?",
-      "Která část přidá aktuální dokumenty do odpovědi?",
-    ),
-    choices: [
-      l("The token IDs themselves.", "Samotná ID tokenů."),
-      l("Temperature.", "Teplota."),
-      l(
-        "A retriever or permitted search tool.",
-        "Vyhledávání dokumentů nebo povolený hledací nástroj.",
-      ),
-    ],
-    answer: 2,
-    explanation: l(
-      "External retrieval updates the input. It does not automatically update the model’s weights.",
-      "Externí vyhledávání mění vstup. Automaticky nemění váhy modelu.",
-    ),
   },
 ];
 
@@ -1635,8 +1641,8 @@ export const glossary: [string, Localized][] = [
   [
     "CI / CD",
     l(
-      "Continuous integration checks changes; continuous delivery/deployment prepares or publishes them.",
-      "Průběžná integrace kontroluje změny; průběžné doručování nebo nasazování je připravuje či publikuje.",
+      "Continuous integration frequently combines changes into shared code and runs automated checks. Continuous delivery keeps releases ready; continuous deployment publishes passing changes automatically.",
+      "Průběžná integrace často spojuje změny do společného kódu a automaticky je kontroluje. Průběžné doručování připravuje verze k vydání; průběžné nasazování je po úspěšných kontrolách publikuje automaticky.",
     ),
   ],
 ];

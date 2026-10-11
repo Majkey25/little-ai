@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { text, l, type Lang } from "./content";
 
-export type DemoProps = { lang: Lang; step: number };
+export type DemoProps = { lang: Lang; step: number; motion?: boolean };
 export function Arrow({ back = false }: { back?: boolean }) {
   return (
     <svg
@@ -49,8 +49,8 @@ const iconPaths: Record<string, string> = {
   engineering: "M8 5l-6 7 6 7M16 5l6 7-6 7M14 3l-4 18",
   whole:
     "M2 12h20M12 2c-8 8-8 12 0 20 8-8 8-12 0-20ZM22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z",
+  images: "M3 3h18v18H3ZM3 17l6-6 4 4 3-3 5 5M17 7h.01",
   home: "M3 11l9-8 9 8M5 10v11h14V10M10 21v-7h4v7",
-  progress: "M4 21V11h3v10M11 21V4h3v17M18 21v-7h3v7",
   sources: "M12 21V5q-5-4-10-1v15q5-3 10 2ZM12 5q5-4 10-1v15q-5-3-10 2",
 };
 export function Icon({ name }: { name: string }) {
@@ -132,18 +132,18 @@ export function TeachingLabel({ lang }: { lang: Lang }) {
 }
 export function Flow({ labels, active }: { labels: string[]; active: number }) {
   return (
-    <div className="flow">
+    <ol className="flow">
       {labels.map((label, i) => (
-        <div
+        <li
           key={label}
-          className={`flow-item ${i <= active ? "reached" : ""}`}
+          className={`flow-item ${i <= active ? "reached" : ""} ${i === active ? "current" : ""}`}
+          aria-current={i === active ? "step" : undefined}
         >
           <span className={`circle color-${i % 4}`}>{i + 1}</span>
           <strong>{label}</strong>
-          {i < labels.length - 1 && <Arrow />}
-        </div>
+        </li>
       ))}
-    </div>
+    </ol>
   );
 }
 export function Network({
@@ -263,6 +263,7 @@ export function Network({
       ))}
       {hero && (
         <g
+          className="svg-label"
           fill="#4c496c"
           fontSize="18"
           fontWeight="700"
@@ -288,46 +289,64 @@ export function LineChart({
   label,
   color = "#7273ed",
   max,
+  start = 0,
+  end = values.length - 1,
 }: {
   values: number[];
   label: string;
   color?: string;
   max?: number;
+  start?: number;
+  end?: number;
 }) {
   const top = max ?? Math.max(0.01, ...values);
   const path = values
     .map(
       (v, i) =>
-        `${i ? "L" : "M"}${25 + (i / Math.max(1, values.length - 1)) * 450} ${155 - (v / top) * 130}`,
+        `${i ? "L" : "M"}${75 + (i / Math.max(1, values.length - 1)) * 400} ${155 - (v / top) * 130}`,
     )
     .join(" ");
   return (
-    <svg
-      className="line-chart"
-      viewBox="0 0 500 185"
-      role="img"
-      aria-label={label}
-    >
-      <path d="M25 20V155H475" stroke="#d1cfde" fill="none" />
-      {[0.25, 0.5, 0.75].map((v) => (
+    <>
+      <svg
+        className="line-chart"
+        viewBox="0 0 500 185"
+        role="img"
+        aria-label={`${label}. x: ${start}–${end}; y: 0–${top}; y(${end}) = ${values.at(-1)?.toFixed(3) ?? "?"}.`}
+      >
+        <path d="M75 20V155H475" stroke="#d1cfde" fill="none" />
+        {[0.25, 0.5, 0.75].map((v) => (
+          <path
+            key={v}
+            d={`M75 ${155 - v * 130}H475`}
+            stroke="#e2dfeb"
+            strokeDasharray="4 6"
+          />
+        ))}
         <path
-          key={v}
-          d={`M25 ${155 - v * 130}H475`}
-          stroke="#e2dfeb"
-          strokeDasharray="4 6"
+          d={path}
+          fill="none"
+          stroke={color}
+          strokeWidth="4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
-      ))}
-      <path
-        d={path}
-        fill="none"
-        stroke={color}
-        strokeWidth="4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <text x="25" y="180" fill="#66677e" fontSize="13">
-        {label}
-      </text>
-    </svg>
+        {values.length > 0 && (
+          <circle
+            cx={values.length > 1 ? 475 : 75}
+            cy={155 - (values[values.length - 1] / top) * 130}
+            r="4"
+            fill={color}
+          />
+        )}
+        <g className="svg-label" fill="#66677e" fontSize="16">
+          <text x="65" y="30" textAnchor="end">{top}</text>
+          <text x="65" y="160" textAnchor="end">0</text>
+          <text x="75" y="180">{start}</text>
+          {end !== start && <text x="475" y="180" textAnchor="end">{end}</text>}
+        </g>
+      </svg>
+      <p className="demo-note">{label}</p>
+    </>
   );
 }
