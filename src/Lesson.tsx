@@ -143,7 +143,7 @@ export function Lesson({
           ))}
         </div>
       </div>
-      <details className="lesson-details">
+      <details className="lesson-details" onToggle={pause} onFocusCapture={pause}>
         <summary>
           <Icon name="sources" />
           {text(l("Details & sources", "Podrobnosti a zdroje"), lang)}
