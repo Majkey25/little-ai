@@ -179,15 +179,6 @@ export function AIDemo({ lang, step }: DemoProps) {
             lang,
           )}
         </Note>
-        <Note>
-          {text(
-            l(
-              "The language pipeline is illustrated. No live language model.",
-              "Jazykový postup je ilustrační. Bez živého jazykového modelu.",
-            ),
-            lang,
-          )}
-        </Note>
       </details>
     </div>
   );

@@ -360,9 +360,6 @@ svg {
   letter-spacing: -2.7px;
   line-height: 1.03;
 }
-.hero h1 span {
-  color: #252442;
-}
 .hero p {
   color: var(--muted);
   font-size: 18px;
@@ -545,12 +542,6 @@ svg {
   max-width: 480px;
   line-height: 1.17;
   margin-bottom: 8px;
-}
-.game-band p {
-  font-size: 13px;
-  color: #676283;
-  margin-bottom: 17px;
-  max-width: 430px;
 }
 .game-band .primary {
   padding: 9px 17px;
@@ -760,17 +751,6 @@ label.story-controls {
   font-size: 14px;
   color: #534a78;
 }
-.story-details > summary::after,
-.demo-details > summary::after {
-  content: "+";
-  margin-left: auto;
-  color: #8f86a6;
-  font-size: 21px;
-}
-.story-details[open] > summary::after,
-.demo-details[open] > summary::after {
-  content: "−";
-}
 .story-details[open],
 .demo-details[open] {
   display: flex;
@@ -803,11 +783,16 @@ label.story-controls {
   max-height: 220px;
 }
 .story-arrow {
+  display: inline-flex;
   align-self: center;
   color: #8a7fd0;
-  font-size: 28px;
-  font-weight: 900;
-  line-height: 1;
+}
+.arrow-icon {
+  flex: none;
+}
+.story-arrow .arrow-icon {
+  width: 28px;
+  height: 28px;
 }
 .demo h3 {
   margin-bottom: 12px;
@@ -1620,13 +1605,17 @@ summary {
 summary::-webkit-details-marker {
   display: none;
 }
-summary > span:last-child {
+summary::after {
+  content: "";
+  flex: 0 0 20px;
+  height: 20px;
   margin-left: auto;
-  color: #8f86a6;
-  font-size: 21px;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m6 9 6 6 6-6' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: transform 0.2s;
 }
-details[open] > summary > span:last-child {
-  transform: rotate(45deg);
+details[open] > summary::after {
+  transform: rotate(180deg);
 }
 .lesson-details > summary {
   min-height: 52px;
@@ -2191,6 +2180,10 @@ details[open] > summary > span:last-child {
   border-radius: 50%;
   font-size: 40px;
 }
+.release-signal .arrow-icon {
+  width: 36px;
+  height: 36px;
+}
 .release-stage.blocked .release-signal {
   background: #fad7d6;
   color: #793847;
@@ -2228,6 +2221,11 @@ details[open] > summary > span:last-child {
   font-style: normal;
 }
 .tool-return {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   margin-bottom: 14px;
   padding: 8px 12px;
   border-radius: 12px;
@@ -2477,9 +2475,6 @@ details[open] > summary > span:last-child {
   .game-band h2 {
     font-size: 24px;
   }
-  .game-band p {
-    font-size: 14px;
-  }
   .intro {
     font-size: 16px;
     margin-bottom: 22px;
@@ -2505,7 +2500,6 @@ details[open] > summary > span:last-child {
   }
   .story-arrow {
     width: auto;
-    text-align: center;
     transform: rotate(90deg);
   }
   .demo .demo-note {
@@ -2631,9 +2625,6 @@ details[open] > summary > span:last-child {
     flex-direction: column;
     align-items: start;
     margin-bottom: 18px;
-  }
-  .game-page-heading .intro {
-    margin-bottom: 0;
   }
   /* A viewport-sized window avoids a page-tall iframe fighting the page scroll. */
   .game-frame {

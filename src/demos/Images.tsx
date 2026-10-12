@@ -1,6 +1,6 @@
 import { useEffect, useId, useMemo, useState } from "react";
 import { l, text } from "../content";
-import { Note, Slider, type DemoProps } from "../components";
+import { Slider, type DemoProps } from "../components";
 import {
   guidedUpdate,
   IMAGE_STEPS,
@@ -183,16 +183,20 @@ export function ImagesDemo({ lang, step, motion = true }: DemoProps) {
             <marker
               key={name}
               id={`${id}-${name}`}
-              viewBox="0 0 10 10"
-              refX="8"
-              refY="5"
-              markerWidth="6"
-              markerHeight="6"
+              viewBox="0 0 12 12"
+              refX="10"
+              refY="6"
+              markerWidth="5"
+              markerHeight="5"
               orient="auto-start-reverse"
             >
               <path
-                d="M1 1 9 5 1 9Z"
-                fill={["#7560c7", "#638db8", "#d38a49"][i]}
+                d="M3 2l7 4-7 4"
+                fill="none"
+                stroke={["#7560c7", "#638db8", "#d38a49"][i]}
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </marker>
           ))}
@@ -681,7 +685,6 @@ export function ImagesDemo({ lang, step, motion = true }: DemoProps) {
           />
         )}
       </div>
-      <Note>{caption}</Note>
     </div>
   );
 }

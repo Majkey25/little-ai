@@ -58,7 +58,6 @@ export function AgentsDemo({ lang, step }: DemoProps) {
               {text(l("Reset this example", "Resetuj příklad"), lang)}
             </button>
           </div>
-          <Note>{text(l("Rule-based loop illustration. No LLM or learning.", "Ilustrace smyčky s pevnými pravidly. Bez LLM a učení."), lang)}</Note>
         </>
       ) : step === 1 ? (
         <>
@@ -97,7 +96,6 @@ export function AgentsDemo({ lang, step }: DemoProps) {
               onChange={setSkill}
             />
           </div>
-          <Note>{text(l("Conceptual sliders, not benchmarks or an AGI threshold. Broad competence and performance both matter.", "Myšlenkové posuvníky, ne benchmarky ani hranice AGI. Záleží na šíři i úrovni schopností."), lang)}</Note>
         </>
       ) : (
         <>
@@ -317,15 +315,6 @@ export function AlignmentDemo({ lang, step }: DemoProps) {
         <code>{`used = min(10, max(0, ${world} − ${safe ? 60 : 0})); clips += used × 5`}</code>
         <p>{text(l("The implemented limit prevents the next batch from consuming protected resources. Changing policy does not restore past damage. You can stop making batches or change policy at any time.", "Naprogramovaný limit zabrání další dávce spotřebovat chráněné zdroje. Změna zásady nevrátí minulé škody. Dávky můžeš přestat vyrábět nebo kdykoli změnit zásadu."), lang)}</p>
       </details>
-      <Note>
-        {text(
-          l(
-            "Deterministic toy simulation. It illustrates goal design, not an AGI prediction.",
-            "Jednoduchá deterministická simulace. Ukazuje návrh cílů, ne předpověď AGI.",
-          ),
-          lang,
-        )}
-      </Note>
     </div>
   );
 }
@@ -409,7 +398,7 @@ export function EngineeringDemo({ lang, step }: DemoProps) {
               ]}
               active={released ? 2 : checked && passed ? 1 : 0}
             />
-            <strong className="release-signal" aria-hidden="true">{released ? "✓" : checked && passed ? "→" : "×"}</strong>
+            <strong className="release-signal" aria-hidden="true">{released ? "✓" : checked && passed ? <Arrow /> : "×"}</strong>
           </div>
         )}
       </div>
@@ -432,12 +421,12 @@ export function EngineeringDemo({ lang, step }: DemoProps) {
               </button>}
             </div>
           <p role="status">
-            {released ? text(l("Illustrated release only. A real workflow still needs verification and monitoring.", "Pouze ukázkové vydání. Skutečný průchod stále potřebuje ověření a sledování."), lang) : checked
+            {released ? text(l("Example released.", "Ukázka vydána."), lang) : checked
               ? text(
                   passed
                     ? l(
-                        "These checks passed. Live integration still needs verification.",
-                        "Tyto kontroly prošly. Skutečnou integraci stále ověř.",
+                        "Checks passed.",
+                        "Kontroly prošly.",
                       )
                     : l(
                         "Checks failed. Do not deliver this change.",
@@ -462,15 +451,6 @@ export function EngineeringDemo({ lang, step }: DemoProps) {
         <p>{text(l("An agent needs relevant files, interfaces and constraints. Its proposed diff shows work, not correctness. Compile, check types, test important cases and inspect the real workflow.", "Agent potřebuje relevantní soubory, rozhraní a omezení. Navržená změna dokládá práci, ne správnost. Sestav aplikaci, ověř typy, otestuj důležité případy a projdi skutečný průchod."), lang)}</p>
         <p>{text(l("CI runs checks; publication is a separate action. Release small reviewed changes with a rollback plan. Monitor user results, errors and latency, then use that evidence in the next change.", "CI spouští kontroly; publikace je samostatná akce. Vydávej malé zkontrolované změny s možností návratu. Sleduj výsledky uživatelů, chyby a odezvu. Důkazy použij při další změně."), lang)}</p>
       </details>
-      <Note>
-        {text(
-          l(
-            "The arithmetic checks really execute. The delivery pipeline is an illustration, not a real deployment.",
-            "Početní kontroly se skutečně provedou. Doručovací průchod je ilustrace, ne skutečné nasazení.",
-          ),
-          lang,
-        )}
-      </Note>
     </div>
   );
 }
@@ -563,7 +543,11 @@ export function WholeDemo({ lang, step }: DemoProps) {
             </button>
           ))}
         </div>
-        {step === 2 && tools && <p className="tool-return">{text(l("Tool result → context → another model turn", "Výsledek nástroje → kontext → další krok modelu"), lang)}</p>}
+        {step === 2 && tools && <p className="tool-return">
+          <span>{text(l("Tool result", "Výsledek nástroje"), lang)}</span><Arrow />
+          <span>{text(l("Context", "Kontext"), lang)}</span><Arrow />
+          <span>{text(l("Next model turn", "Další krok modelu"), lang)}</span>
+        </p>}
         <p className="whole-explanation" key={current.id}>{text(current.description, lang)}</p>
       </div>
       <div className="story-controls">
@@ -597,15 +581,6 @@ export function WholeDemo({ lang, step }: DemoProps) {
           {text(l("Revisit this idea", "Vrať se k této myšlence"), lang)}
         </a>
       </details>
-      <Note>
-        {text(
-          l(
-            "Architecture illustration. No live LLM, search or tool runs here.",
-            "Ilustrace architektury. Bez živého LLM, vyhledávání a spuštění nástroje.",
-          ),
-          lang,
-        )}
-      </Note>
     </div>
   );
 }

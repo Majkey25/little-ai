@@ -1184,7 +1184,7 @@ export const lessons: Lesson[] = [
     ),
     details: [
       scene(
-        l("Names without magic", "Názvy bez magie"),
+        l("AGI and ASI", "AGI a ASI"),
         l(
           "AGI = artificial general intelligence. ASI = artificial superintelligence, broadly exceeding human ability. These describe proposed capability categories. Neither proves consciousness, emotions or a particular arrival date. The slider is a conceptual illustration, not a real system assessment.",
           "AGI = obecná umělá inteligence. ASI = umělá superinteligence, která široce překonává lidské schopnosti. Jde o navrhované kategorie schopností. Nedokazují vědomí, emoce ani termín vzniku. Posuvníky jsou ilustrace, ne hodnocení skutečného systému.",
@@ -1260,8 +1260,8 @@ export const lessons: Lesson[] = [
     group: 3,
     name: l("Software engineering", "Softwarové inženýrství"),
     subtitle: l(
-      "Build things you can trust",
-      "Stavěj věci, kterým můžeš věřit",
+      "From requirements to release",
+      "Od zadání po vydání",
     ),
     title: l(
       "Writing code is one part of the job.",

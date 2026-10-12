@@ -5,18 +5,20 @@ export type DemoProps = { lang: Lang; step: number; motion?: boolean };
 export function Arrow({ back = false }: { back?: boolean }) {
   return (
     <svg
+      className="arrow-icon"
       width="20"
       height="20"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.8"
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
+      focusable="false"
       style={{ transform: back ? "rotate(180deg)" : undefined }}
     >
-      <path d="M4 12h15m-6-6 6 6-6 6" />
+      <path d="M5 12h14M12 5l7 7-7 7" />
     </svg>
   );
 }
@@ -116,19 +118,6 @@ export function Slider({
 }
 export function Note({ children }: { children: ReactNode }) {
   return <p className="demo-note">{children}</p>;
-}
-export function TeachingLabel({ lang }: { lang: Lang }) {
-  return (
-    <Note>
-      {text(
-        l(
-          "Illustrative data. Real calculations. No live LLM.",
-          "Ilustrační data. Skutečné výpočty. Bez živého LLM.",
-        ),
-        lang,
-      )}
-    </Note>
-  );
 }
 export function Flow({ labels, active }: { labels: string[]; active: number }) {
   return (

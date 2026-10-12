@@ -18,14 +18,12 @@ export function Home({ lang }: { lang: Lang }) {
         <div>
           <h1>
             {text(l("How AI works.", "Jak funguje AI."), lang)}
-            <br />
-            <span>{text(l("See it. Try it.", "Zkus si to."), lang)}</span>
           </h1>
           <p>
             {text(
               l(
-                `${lessons.length} short interactive stories. Open any chapter, press play or change the numbers.`,
-                `${lessons.length} krátkých interaktivních příběhů. Otevři kteroukoli kapitolu, pusť si ji nebo měň čísla.`,
+                "Interactive explanations, from tokens to image generation.",
+                "Interaktivní vysvětlení od tokenů po generování obrázků.",
               ),
               lang,
             )}
@@ -40,24 +38,7 @@ export function Home({ lang }: { lang: Lang }) {
       <CourseMap lang={lang} />
       <section className="game-band">
         <div>
-          <h2>
-            {text(
-              l(
-                "What if an AI only wanted more paperclips?",
-                "Co když AI chce jen více sponek?",
-              ),
-              lang,
-            )}
-          </h2>
-          <p>
-            {text(
-              l(
-                "A short game about goals, guardrails and side effects.",
-                "Krátká hra o cílech, pojistkách a vedlejších účincích.",
-              ),
-              lang,
-            )}
-          </p>
+          <h2>Little Clip Factory</h2>
           <a className="primary" href="#/game">
             {text(l("Play the game", "Zahraj si"), lang)}
             <Arrow />
@@ -174,8 +155,8 @@ export function Library({ lang }: { lang: Lang }) {
       <p className="source-note">
         {text(
           l(
-            "Research checked 11 October 2026. These are selected foundations, not every AI topic. Papers can have limitations; AGI and alignment have open questions. This site is an independent educational project.",
-            "Zdroje ověřeny 11. října 2026. Jde o vybrané základy, ne všechny oblasti AI. Studie mají omezení; AGI a soulad cílů mají otevřené otázky. Web je nezávislý vzdělávací projekt.",
+            "Sources checked 11 October 2026.",
+            "Zdroje ověřeny 11. října 2026.",
           ),
           lang,
         )}
@@ -209,12 +190,11 @@ export function Library({ lang }: { lang: Lang }) {
         </p>
       )}
       <section className="glossary">
-        <h2>{text(l("A pocket glossary", "Malý slovníček"), lang)}</h2>
+        <h2>{text(l("Glossary", "Slovníček"), lang)}</h2>
         {glossary.map(([term, definition]) => (
           <details key={term}>
             <summary>
               {term}
-              <span>+</span>
             </summary>
             <p>{text(definition, lang)}</p>
           </details>
@@ -280,15 +260,6 @@ export function GamePage({ lang, motion }: { lang: Lang; motion: boolean }) {
       <div className="game-page-heading">
         <div>
           <h1>Little Clip Factory</h1>
-          <p className="intro">
-            {text(
-              l(
-                "A small goal. Some big consequences.",
-                "Malý cíl. Velké následky.",
-              ),
-              lang,
-            )}
-          </p>
         </div>
         <a
           className="secondary"
@@ -311,8 +282,8 @@ export function GamePage({ lang, motion }: { lang: Lang; motion: boolean }) {
         </a>{" "}
         {text(
           l(
-            "by Frank Lantz. Little Clip Factory uses its own code and art. The bot follows rules; it is not an AGI.",
-            "od Franka Lantze. Little Clip Factory má vlastní kód a grafiku. Bot se řídí pravidly, není to AGI.",
+            "by Frank Lantz.",
+            "od Franka Lantze.",
           ),
           lang,
         )}

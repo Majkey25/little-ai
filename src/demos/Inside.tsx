@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { l, text } from "../content";
-import { Note, Slider, TeachingLabel, type DemoProps } from "../components";
+import { Note, Slider, type DemoProps } from "../components";
 import { cosine, attentionRow, attentionVectors, softmax } from "../math";
 import { useTokens } from "../useTokens";
 
@@ -36,8 +36,8 @@ export function EmbeddingsDemo({ lang, step }: DemoProps) {
         )}
       >
         <defs>
-          <marker id="vector-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-            <path d="M0 0l10 5-10 5Z" fill="#7273ed" />
+          <marker id="vector-arrow" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M3 2l7 4-7 4" fill="none" stroke="#7273ed" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </marker>
         </defs>
         <text className="svg-label" x="45" y="40" fill="#60577c" fontSize="20">
@@ -86,7 +86,7 @@ export function EmbeddingsDemo({ lang, step }: DemoProps) {
       </svg>
       {step === 0 ? (
         <label className="story-controls">
-          {text(l("A word and its toy vector", "Slovo a jeho výukový vektor"), lang)}
+          {text(l("Word vector", "Vektor slova"), lang)}
           <select value={selected} onChange={(e) => setSelected(Number(e.target.value))}>
             {points.map((point, i) => <option key={point.name.en} value={i}>{text(point.name, lang)} · [{point.v.join(", ")}]</option>)}
           </select>
@@ -111,7 +111,6 @@ export function EmbeddingsDemo({ lang, step }: DemoProps) {
             <strong>{point.score.toFixed(3)}</strong>
           </div>
         ))}
-        <TeachingLabel lang={lang} />
       </details>
     </div>
   );
@@ -190,7 +189,6 @@ export function AttentionDemo({ lang, step }: DemoProps) {
           {words.map((word, i) => <option value={i} key={i}>{i + 1}. {word}</option>)}
         </select>
       </label>
-      <TeachingLabel lang={lang} />
       <details className="story-details">
         <summary>{text(l("Q / K / V & full matrix", "Q / K / V a celá matice"), lang)}</summary>
         <code className="formula">
@@ -274,7 +272,6 @@ export function PredictionDemo({ lang, step }: DemoProps) {
       ) : (
         <div className="story-controls"><button className="primary" onClick={sample}>{text(l("Choose a continuation", "Vyber pokračování"), lang)}</button></div>
       )}
-      <Note>{text(l("Toy word choices. Real models choose tokens, often parts of words.", "Výukový výběr slov. Skutečné modely vybírají tokeny, často části slov."), lang)}</Note>
       <details className="story-details">
         <summary>{text(l("Decoding options & calculation", "Volby dekódování a výpočet"), lang)}</summary>
         <label>
@@ -289,7 +286,6 @@ export function PredictionDemo({ lang, step }: DemoProps) {
         {step !== 1 && <Slider label={text(l("Temperature", "Teplota"), lang)} value={temperature} min={0.1} max={2} step={0.1} onChange={setTemperature} />}
         <button className="secondary" onClick={() => setChoice(null)}>{text(l("Clear", "Vymaž"), lang)}</button>
         <Note>{text(l("One choice from the same prefix. Scores are invented; words can require several tokens. Sampling can change the result, not verify it.", "Jeden výběr ze stejného začátku. Skóre jsou vymyšlená, slova mohou potřebovat více tokenů. Náhodný výběr mění výsledek, neověřuje ho."), lang)}</Note>
-        <TeachingLabel lang={lang} />
       </details>
     </div>
   );

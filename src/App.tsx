@@ -303,7 +303,7 @@ export default function App() {
           <div>
             <h1>
               {text(
-                l("This chapter wandered off.", "Tahle kapitola se zatoulala."),
+                l("Chapter not found.", "Kapitola nenalezena."),
                 lang,
               )}
             </h1>
@@ -314,14 +314,7 @@ export default function App() {
         )}
       </main>
       <footer className="site-footer" inert={menu}>
-        little ai ·{" "}
-        {text(
-          l(
-            "Small explanations. Real sources.",
-            "Malá vysvětlení. Skutečné zdroje.",
-          ),
-          lang,
-        )}
+        little ai
         <a href="#/sources">{text(l("Sources", "Zdroje"), lang)}</a>
       </footer>
     </div>

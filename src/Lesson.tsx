@@ -147,7 +147,6 @@ export function Lesson({
         <summary>
           <Icon name="sources" />
           {text(l("Details & sources", "Podrobnosti a zdroje"), lang)}
-          <span>+</span>
         </summary>
         <p className="detail-lead">{text(lesson.intro, lang)}</p>
         <div className="detail-content">

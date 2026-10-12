@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { l, text } from "../content";
-import { Note, type DemoProps } from "../components";
+import { Arrow, Note, type DemoProps } from "../components";
 import { documents, retrieve, queryVectors } from "../math";
 
 export function RetrievalDemo({ lang, step }: DemoProps) {
@@ -45,7 +45,7 @@ export function RetrievalDemo({ lang, step }: DemoProps) {
                 </div>
               ))}
             </div>
-            <span className="story-arrow" aria-hidden="true">→</span>
+            <span className="story-arrow"><Arrow /></span>
             <div className="index-node">
               <span className="vector-dots" aria-hidden="true">● ● ●</span>
               <strong>{collection.length}</strong>
@@ -151,7 +151,6 @@ export function RetrievalDemo({ lang, step }: DemoProps) {
           ), lang)}
         </Note>
       </details>
-      <Note>{text(l("Toy collection. Real cosine calculations. No live LLM.", "Výuková sbírka. Skutečné kosinové výpočty. Bez živého LLM."), lang)}</Note>
     </div>
   );
 }
@@ -202,12 +201,6 @@ export function HallucinationsDemo({ lang, step }: DemoProps) {
             </span>
           </div>
           <p>{web && !source ? text(l("Prague is the capital of Czechia.", "Praha je hlavní město České republiky."), lang) : result[lang]}</p>
-          <small>
-            {text(
-              web && !source ? l("Prepared result, not a live search", "Připravený výsledek, ne živé hledání") : l("Fictional teaching collection", "Fiktivní výuková sbírka"),
-              lang,
-            )}
-          </small>
         </div>
         {step > 0 && <div
           className={`answer-bubble ${grounded ? "grounded" : blocked ? "uncertain" : "wrong"}`}
@@ -297,7 +290,6 @@ export function HallucinationsDemo({ lang, step }: DemoProps) {
           "Podobnost nedokazuje pravdu. Záměrně chybná připravená logika převezme první město bez kontroly státu. Skutečný model může znát Prahu z tréninku i bez databáze; chybějící zdroj nenutí odpověď Paříž.",
         ), lang)}</Note>
       </details>
-      <Note>{text(l("Scripted RAG failure. No live LLM or web search.", "Připravená chyba RAG. Bez živého LLM a webového hledání."), lang)}</Note>
     </div>
   );
 }
@@ -354,10 +346,9 @@ export function ToolsDemo({ lang, step }: DemoProps) {
         {step === 0 ? (
           <div className="tool-call-stage">
             <div className="tool-node">
-              <span>{text(l("Scripted call", "Připravené volání"), lang)}</span>
               <strong>{text(l("Request", "Požadavek"), lang)}</strong>
             </div>
-            <span className="story-arrow" aria-hidden="true">→</span>
+            <span className="story-arrow"><Arrow /></span>
             <div className="tool-node">
               <code>calculate</code>
               <strong>{a.trim() || "?"} {symbol} {b.trim() || "?"}</strong>
@@ -375,9 +366,9 @@ export function ToolsDemo({ lang, step }: DemoProps) {
               <span>{text(l("Observation", "Výsledek nástroje"), lang)}</span>
               <strong>{text(status === "result" ? l("Result ready", "Výsledek připraven") : status === "error" ? l("Tool error", "Chyba nástroje") : l("Not run yet", "Zatím nespuštěno"), lang)}</strong>
             </div>
-            <span className="story-arrow" aria-hidden="true">→</span>
+            <span className="story-arrow"><Arrow /></span>
             <div className="tool-node"><strong>{text(l("Context", "Kontext"), lang)}</strong></div>
-            <span className="story-arrow" aria-hidden="true">→</span>
+            <span className="story-arrow"><Arrow /></span>
             <div className="tool-node">
               <strong>{text(l("Model", "Model"), lang)}</strong>
               <span>{text(l("Answer or another call", "Odpověď nebo další volání"), lang)}</span>
@@ -466,14 +457,13 @@ export function ToolsDemo({ lang, step }: DemoProps) {
         <Note>
         {text(
           l(
-            "The calculation is real and stays in your browser. The model call is scripted. No eval(), API key or live model.",
-            "Výpočet je skutečný a zůstává v prohlížeči. Volání modelu je připravené. Bez eval(), API klíče a živého modelu.",
+            "The browser validates the arguments and calculates the result. The model request is a prepared example.",
+            "Prohlížeč ověří argumenty a vypočítá výsledek. Požadavek modelu je připravený příklad.",
           ),
           lang,
         )}
         </Note>
       </details>
-      <Note>{text(l("Real arithmetic. Scripted call, no live LLM.", "Skutečné počty. Připravené volání, bez živého LLM."), lang)}</Note>
     </div>
   );
 }
@@ -545,13 +535,13 @@ export function ReasoningDemo({ lang, step }: DemoProps) {
           <span>{text(l("Proposed", "Navrženo"), lang)}</span>
           <strong>{proposed}</strong>
         </div>
-        <span className="story-arrow" aria-hidden="true">→</span>
+        <span className="story-arrow"><Arrow /></span>
         <div className={`reasoning-node ${verified ? proposed === remaining ? "grounded" : "wrong" : "uncertain"}`}>
           <span>{text(l("Arithmetic check", "Kontrola výpočtem"), lang)}</span>
           <strong>{verified ? remaining : "?"}</strong>
           <span>{text(verified ? proposed === remaining ? l("Matches", "Souhlasí") : l("Correction", "Oprava") : l("Not checked", "Neověřeno"), lang)}</span>
         </div>
-        <span className="story-arrow" aria-hidden="true">→</span>
+        <span className="story-arrow"><Arrow /></span>
         <div className="reasoning-node">
           <strong>{text(l("Training outcome", "Výsledek pro trénink"), lang)}</strong>
           <span>{text(verified ? l("Use checked solutions", "Použij ověřená řešení") : l("Check before using", "Před použitím ověř"), lang)}</span>
@@ -624,7 +614,6 @@ export function ReasoningDemo({ lang, step }: DemoProps) {
         )}
       </Note>
       </details>
-      <Note>{text(step === 2 ? l("Training is illustrated; no model learns here.", "Trénink je znázorněn; žádný model se zde neučí.") : l("Scripted problem. Real arithmetic check.", "Připravená úloha. Skutečná kontrola výpočtem."), lang)}</Note>
     </div>
   );
 }
