@@ -1,5 +1,5 @@
 :root {
-  font-family: "Nunito", system-ui, sans-serif;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   color: #232438;
   background: #faf9f6;
   font-synthesis: none;
@@ -374,14 +374,6 @@ svg {
 .hero-network {
   max-height: 310px;
 }
-.network-node {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: float 5s ease-in-out infinite;
-}
-.signal-path {
-  stroke-dasharray: 3 3;
-}
 .signal-pulse {
   stroke: var(--action);
   stroke-width: 4;
@@ -393,11 +385,6 @@ svg {
 @keyframes signal {
   to {
     stroke-dashoffset: -100;
-  }
-}
-@keyframes float {
-  50% {
-    transform: translateY(-5px);
   }
 }
 @keyframes appear {
@@ -528,32 +515,24 @@ svg {
 }
 .game-band {
   margin-top: 30px;
-  display: grid;
-  grid-template-columns: 1.25fr 0.75fr;
-  gap: 20px;
-  background: #ebe7ff;
-  border-radius: 19px;
-  padding: 23px 28px;
-  overflow: hidden;
-  min-height: 198px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 24px 0;
+}
+.game-band > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 .game-band h2 {
   font-size: 28px;
   max-width: 480px;
   line-height: 1.17;
-  margin-bottom: 8px;
 }
 .game-band .primary {
   padding: 9px 17px;
-}
-.game-band img {
-  height: 205px;
-  max-width: 100%;
-  object-fit: contain;
-  align-self: center;
-  justify-self: center;
-  margin: -25px 0;
-  animation: float 6s ease-in-out infinite;
 }
 .intro {
   color: var(--muted);
@@ -1482,21 +1461,26 @@ pre {
   display: block;
   margin-bottom: 8px;
 }
-.robot-scene {
-  position: relative;
-  text-align: center;
+.production-diagram {
+  display: block;
+  width: 100%;
+  margin: 18px 0;
 }
-.robot-scene img {
-  width: 95%;
-  max-height: 285px;
-  object-fit: contain;
-  animation: float 5s ease-in-out infinite;
+.resource-level {
+  transition: height 0.4s, y 0.4s, fill 0.4s;
 }
-.robot-caption {
-  font-size: 15px;
-  color: #665780;
-  font-weight: 800;
-  margin-top: 7px;
+.produced-clip {
+  animation: produce-clip 0.5s ease-out;
+}
+@keyframes produce-clip {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 .policy-switch {
   display: flex;
@@ -2308,14 +2292,6 @@ details[open] > summary::after {
   .hero p {
     max-width: 420px;
   }
-  .game-band {
-    grid-template-columns: 1.4fr 0.6fr;
-    padding: 22px;
-  }
-  .game-band img {
-    min-width: 170px;
-    height: 165px;
-  }
   .game-band h2 {
     font-size: 23px;
   }
@@ -2460,17 +2436,8 @@ details[open] > summary::after {
     font-size: 13px;
   }
   .game-band {
-    grid-template-columns: 1fr;
-    gap: 8px;
     margin-top: 24px;
-    padding: 22px 18px;
-  }
-  .game-band img {
-    width: 170px;
-    min-width: 0;
-    height: 150px;
-    margin: 0 0 -12px;
-    justify-self: end;
+    padding: 22px 0;
   }
   .game-band h2 {
     font-size: 24px;

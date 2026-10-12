@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { l, lessons, text, type Lang } from "./content";
-import { Icon, Star } from "./components";
+import { BrandMark, Icon } from "./components";
 import { Home, CourseMap, Library, GamePage } from "./Pages";
 import { Lesson } from "./Lesson";
 
@@ -131,7 +131,7 @@ export default function App() {
       </a>
       <header className="topbar">
         <a className="topbar-brand" href="#/" inert={menu}>
-          <Star size={26} />
+          <BrandMark size={26} />
           <span>little ai</span>
         </a>
         <button

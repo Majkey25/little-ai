@@ -22,18 +22,16 @@ export function Arrow({ back = false }: { back?: boolean }) {
     </svg>
   );
 }
-export function Star({ size = 34 }: { size?: number }) {
+export function BrandMark({ size = 34 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true">
-      <path
-        fill="currentColor"
-        d="M32 3c5 0 6 17 11 18s18 6 18 11-13 9-18 11-6 18-11 18-9-13-11-18S3 37 3 32s13-9 18-11S27 3 32 3Z"
-      />
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <path d="M5 6l14 6L5 18M5 6v12" />
+      <g fill="var(--page, #faf9f6)"><circle cx="5" cy="6" r="3" /><circle cx="5" cy="18" r="3" /><circle cx="19" cy="12" r="3" /></g>
     </svg>
   );
 }
 const iconPaths: Record<string, string> = {
-  ai: "M8 10h8M9 15h.01M15 15h.01M10 19q2 2 4 0M12 3v3M4 8h16v14H4Z",
+  ai: "M7 7h10v10H7ZM9 2v5M15 2v5M9 17v5M15 17v5M2 9h5M2 15h5M17 9h5M17 15h5",
   neural: "M7 6l10 6M7 18l10-6M5 8v8",
   learning: "M4 6q8-7 16 0v12q-8 7-16 0ZM4 6q8 7 16 0M4 12q8 7 16 0",
   tokens: "M6 3h9l4 4v14H6ZM10 10h5M10 14h5M10 18h3",
@@ -47,7 +45,7 @@ const iconPaths: Record<string, string> = {
   reasoning: "M9 20h6M9 23h6M8 14a7 7 0 1 1 8 0l-1 3H9Z",
   agents:
     "M3 21v-4q0-4 5-4t5 4v4M15 14q6-2 6 3v4M12 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM20 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z",
-  alignment: "M3 21l14-14M5 19C0 8 9 2 22 2c0 13-6 20-17 17Z",
+  alignment: "M12 3l8 3v6c0 5-8 9-8 9s-8-4-8-9V6ZM8 12l3 3 5-6",
   engineering: "M8 5l-6 7 6 7M16 5l6 7-6 7M14 3l-4 18",
   whole:
     "M2 12h20M12 2c-8 8-8 12 0 20 8-8 8-12 0-20ZM22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z",
@@ -183,7 +181,7 @@ export function Network({
     >
       <g fill="none" stroke="#9691e8" strokeWidth="2.5">
         {edges.map(([a, b], i) => {
-          const path = `M${points[a][0]} ${points[a][1]} C${points[a][0] + 80} ${points[a][1]},${points[b][0] - 80} ${points[b][1]},${points[b][0]} ${points[b][1]}`;
+          const path = `M${points[a][0]} ${points[a][1]} L${points[b][0]} ${points[b][1]}`;
           return (
             <g key={i}>
               <path
@@ -203,51 +201,15 @@ export function Network({
         })}
       </g>
       {points.map(([x, y], i) => (
-        <g
-          className="network-node"
-          style={{ animationDelay: `${i * -0.6}s` }}
-          key={i}
-        >
+        <g key={i}>
           <circle
             cx={x}
             cy={y}
-            r={i === 4 ? 49 : 35}
-            fill={
-              [
-                "#f7dc7b",
-                "#b6aff8",
-                "#b6aff8",
-                "#b6aff8",
-                "#baedd5",
-                "#ffd5b8",
-                "#ffd5b8",
-                "#f7dc7b",
-              ][i]
-            }
-            stroke={i === 4 ? "#9ad9bf" : "#a6a0ed"}
+            r="26"
+            fill={i < 3 ? "#e6edf4" : i < 6 ? "#ece9ff" : "#d9efe4"}
+            stroke={i < 3 ? "#8b9fb1" : i < 6 ? "#9691e8" : "#79bf9d"}
             strokeWidth="1.8"
           />
-          <path
-            d={`M${x - 18} ${y - 16}q3-10 13-12`}
-            fill="none"
-            stroke="white"
-            strokeOpacity=".6"
-            strokeWidth="7"
-            strokeLinecap="round"
-          />
-          {i === 4 && (
-            <g fill="#333052">
-              <ellipse cx={x - 15} cy={y} rx="3.5" ry="5" />
-              <ellipse cx={x + 15} cy={y} rx="3.5" ry="5" />
-              <path
-                d={`M${x - 6} ${y + 9}q6 10 12 0`}
-                fill="none"
-                stroke="#333052"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-              />
-            </g>
-          )}
         </g>
       ))}
       {hero && (
@@ -256,7 +218,7 @@ export function Network({
           fill="#4c496c"
           fontSize="18"
           fontWeight="700"
-          fontFamily="Nunito, sans-serif"
+          fontFamily="inherit"
           textAnchor="middle"
         >
           <text x="90" y="372">

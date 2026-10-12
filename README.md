@@ -53,13 +53,13 @@ To play the embedded game locally, run its separate repository on port 4174. Pro
 
 Chapter demos load on demand in existing groups. Exact tokenization runs in a browser Web Worker, with encoding tables loaded when needed. Context requests exact token IDs for their count without constructing the byte-inspection map; the tokenizer chapter still displays raw UTF-8 fragments. Count-only mode does not reduce encoding-table downloads.
 
-Fonts and artwork are local. Clipbot uses a 795,198-byte lossless WebP in each repository; composited pixel checks match the original PNG. Vite emits fingerprinted asset URLs, so changing artwork changes its built filename.
+The guide uses system fonts and native SVG diagrams. It has no mascot bitmap or font downloads. Vite emits fingerprinted asset URLs; the separately embedded game draws its factory in Canvas2D.
 
 ## Privacy and accessibility
 
 No accounts, analytics, API keys or backend. Text entered into examples stays in the browser. The guide stores only its language preference. An older `little-ai-progress` value is left untouched and is not used for tracking. The separate game has its own local save. External source links open only when selected.
 
-Keyboard controls, focus indicators, labeled inputs, phone layouts, pauseable explanations and reduced-motion support are included. The animation toggle also controls the embedded game. Native SVG diagrams keep text selectable; the generated Clipbot illustration is original to these projects.
+Keyboard controls, focus indicators, labeled inputs, phone layouts, pauseable explanations and reduced-motion support are included. The animation toggle also controls the embedded game. Native SVG diagrams keep text selectable.
 
 ## Publish
 

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import clipbot from "./assets/clipbot.webp";
 import {
   groups,
   lessons,
@@ -44,18 +43,6 @@ export function Home({ lang }: { lang: Lang }) {
             <Arrow />
           </a>
         </div>
-        <img
-          src={clipbot}
-          loading="lazy"
-          decoding="async"
-          alt={text(
-            l(
-              "Cute paperclip robot with a plant",
-              "Roztomilý robot se sponkou a rostlinou",
-            ),
-            lang,
-          )}
-        />
       </section>
     </div>
   );

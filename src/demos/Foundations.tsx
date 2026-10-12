@@ -219,7 +219,7 @@ export function NeuralDemo({ lang, step }: DemoProps) {
           )}
         >
           <g
-            fontFamily="Nunito, sans-serif"
+            fontFamily="inherit"
             textAnchor="middle"
             fill="#333052"
             fontSize="20"

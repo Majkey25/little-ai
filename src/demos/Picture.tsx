@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { l, text } from "../content";
-import clipbot from "../assets/clipbot.webp";
 import {
   Arrow,
   Flow,
@@ -203,27 +202,27 @@ export function AlignmentDemo({ lang, step }: DemoProps) {
           />
         ) : (
           <>
-        {step === 0 ? <div className="robot-scene">
-          <img
-            src={clipbot}
-            width={1289}
-            height={1221}
-            decoding="async"
-            alt={text(
-              l(
-                "A friendly robot holding a paperclip beside a plant",
-                "Přátelský robot se sponkou vedle rostliny",
-              ),
-              lang,
-            )}
-          />
-          <div className="robot-caption">
-            {text(
-              l("“More paperclips, please.”", "„Více sponek, prosím.“"),
-              lang,
-            )}
-          </div>
-        </div> : <Flow
+        {step === 0 ? (
+          <svg className="production-diagram" viewBox="0 0 500 190" role="img" aria-label={text(l(`Production converts resources to paperclips. ${world} resources remain; ${clips} clips produced.`, `Výroba mění zdroje na sponky. Zbývá ${world} zdrojů; vyrobeno ${clips} sponek.`), lang)}>
+            <g fill="none" stroke="#8b9fb1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M110 88h60m-7-7 7 7-7 7M320 88h65m-7-7 7 7-7 7" />
+              <rect x="34" y="35" width="72" height="105" rx="3" />
+              <rect x="180" y="35" width="135" height="105" rx="3" fill="#e6edf4" />
+              <path d="M180 58h135M198 120h99" />
+              <circle cx="215" cy="88" r="12" />
+              <circle cx="280" cy="88" r="12" />
+            </g>
+            <rect className="resource-level" x="40" y={134 - world * 0.92} width="60" height={world * 0.92} fill={world < 60 ? "#ed9098" : "#79bf9d"} />
+            <g key={clips} className={clips > 0 ? "produced-clip" : undefined} fill="none" stroke="#6059d5" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M410 103V54a17 17 0 0 1 34 0v65a26 26 0 0 1-52 0V56m39 47V57a4 4 0 0 0-8 0v62" />
+            </g>
+            <g fill="#4c496c" fontSize="15" fontWeight="600" textAnchor="middle">
+              <text x="70" y="175">{text(l("Resources", "Zdroje"), lang)}</text>
+              <text x="248" y="175">{text(l("Production", "Výroba"), lang)}</text>
+              <text x="419" y="175">{text(l("Paperclips", "Sponky"), lang)}</text>
+            </g>
+          </svg>
+        ) : <Flow
           labels={[
             text(l("Objective", "Cíl"), lang),
             text(l("Action guard", "Kontrola akce"), lang),
