@@ -26,8 +26,10 @@ export function Lesson({
 }) {
   const [step, setStep] = useState(0);
   const [playing, setPlaying] = useState(false);
+  const [ready, setReady] = useState(false);
+  const [visible, setVisible] = useState(!document.hidden);
   const last = lesson.scenes.length - 1;
-  const active = playing && motion;
+  const active = playing && motion && ready && visible;
   const pause = () => setPlaying(false);
   const show = (scene: number) => {
     setStep(scene);
@@ -37,18 +39,21 @@ export function Lesson({
     if (!motion) setPlaying(false);
   }, [motion]);
   useEffect(() => {
-    if (!active) return;
-    const hide = () => {
+    const visibility = () => {
+      setVisible(!document.hidden);
       if (document.hidden) setPlaying(false);
     };
+    document.addEventListener("visibilitychange", visibility);
+    return () => document.removeEventListener("visibilitychange", visibility);
+  }, []);
+  useEffect(() => {
+    if (!active) return;
     const timer = window.setTimeout(() => {
       setStep(step + 1);
       if (step + 1 >= last) setPlaying(false);
     }, sceneMilliseconds);
-    document.addEventListener("visibilitychange", hide);
     return () => {
       window.clearTimeout(timer);
-      document.removeEventListener("visibilitychange", hide);
     };
   }, [active, step, last]);
   return (
@@ -69,7 +74,7 @@ export function Lesson({
           if (event.key !== "Tab") pause();
         }}
       >
-        <Demo id={lesson.id} lang={lang} step={step} motion={motion} />
+        <Demo id={lesson.id} lang={lang} step={step} motion={motion && visible} onReady={setReady} />
       </div>
       <p className="scene-caption" aria-live={active ? "off" : "polite"}>
         <span key={step}>{text(lesson.scenes[step].body, lang)}</span>
@@ -88,7 +93,7 @@ export function Lesson({
           </button>
           <button
             className="play-button"
-            disabled={!motion}
+            disabled={!motion || !ready}
             onClick={() => {
               if (!active && step === last) setStep(0);
               setPlaying(!active);

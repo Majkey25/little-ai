@@ -704,9 +704,8 @@ export function TokensDemo({ lang, step }: DemoProps) {
             {editor}
             <div className="token-byte-preview">
               <span>
-                {text(l("UTF-8", "UTF-8"), lang)}{" "}
-                <strong>{bytes.length}</strong>{" "}
-                {text(l("bytes", "bajtů"), lang)}
+                {text(l("UTF-8 bytes", "Bajty UTF-8"), lang)}:{" "}
+                <strong>{bytes.length}</strong>
               </span>
               <code
                 aria-label={text(

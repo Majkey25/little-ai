@@ -978,22 +978,22 @@ export const lessons: Lesson[] = [
       "Sebevědomá věta může být chybná.",
     ),
     intro: l(
-      "Remove Czechia from the tiny source collection. See how a badly designed RAG app can copy the wrong capital.",
-      "Odstraň Česko z malé sbírky zdrojů. Sleduj, jak špatně navržené RAG může převzít chybné hlavní město.",
+      "The Czechia source starts excluded. See how a badly designed RAG app can copy the wrong capital.",
+      "Zdroj o Česku je zpočátku vynechaný. Sleduj, jak špatně navržená aplikace s RAG může převzít chybné hlavní město.",
     ),
     scenes: [
       scene(
         l("Missing evidence", "Chybějící podklad"),
         l(
-          "The question asks about Czechia, but the best remaining passage says Paris is the capital of France. Similar wording is not a matching fact.",
-          "Otázka míří na Česko, ale nejlepší zbylý úryvek říká, že Paříž je hlavní město Francie. Podobná věta není stejný fakt.",
+          "Without the Czechia source, the index's top match is about France. Similar wording is not a matching fact.",
+          "Bez zdroje o Česku je první výsledek z indexu o Francii. Podobná věta není stejný fakt.",
         ),
       ),
       scene(
         l("An unsafe shortcut", "Chybná zkratka"),
         l(
-          "Our deliberately broken answer rule copies the first capital. It says Paris. This is a scripted failure demonstration, not how every LLM works.",
-          "Záměrně chybná odpovědní logika převezme první město. Řekne Paříž. Jde o připravenou ukázku chyby, ne popis každého LLM.",
+          "Without Czechia evidence and with the country check off, our deliberately broken rule copies Paris. This is a scripted failure demonstration, not how every LLM works.",
+          "Bez podkladů o Česku a s vypnutou kontrolou státu záměrně chybná logika převezme Paříž. Jde o připravenou ukázku chyby, ne popis každého LLM.",
         ),
       ),
       scene(

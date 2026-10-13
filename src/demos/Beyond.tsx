@@ -80,7 +80,7 @@ export function RetrievalDemo({ lang, step }: DemoProps) {
               <strong>{text(l("Top passage", "První úryvek"), lang)}</strong>
               <p>{selected ? selected[lang] : text(l("No matching source.", "Žádný odpovídající zdroj."), lang)}</p>
             </div>
-            <div className={`answer-bubble ${supported ? "grounded" : "uncertain"}`}>
+            <div role="status" aria-atomic="true" className={`answer-bubble ${supported ? "grounded" : "uncertain"}`}>
               <strong>{text(supported ? l("Supported answer", "Podložená odpověď") : l("Evidence missing", "Chybí podklad"), lang)}</strong>
               <p>{supported && selected ? selected.capital[lang] : text(l("The passage does not support this country. Find another source.", "Úryvek nedokládá odpověď pro tento stát. Najdi jiný zdroj."), lang)}</p>
             </div>
@@ -203,6 +203,8 @@ export function HallucinationsDemo({ lang, step }: DemoProps) {
           <p>{web && !source ? text(l("Prague is the capital of Czechia.", "Praha je hlavní město České republiky."), lang) : result[lang]}</p>
         </div>
         {step > 0 && <div
+          role="status"
+          aria-atomic="true"
           className={`answer-bubble ${grounded ? "grounded" : blocked ? "uncertain" : "wrong"}`}
         >
           {step === 2 && <span className="support-gate">{text(check ? grounded ? l("Country support found", "Podklad ke státu nalezen") : l("Country support missing", "Podklad ke státu chybí") : l("Country check is off", "Kontrola státu je vypnutá"), lang)}</span>}
@@ -319,7 +321,7 @@ export function ToolsDemo({ lang, step }: DemoProps) {
       ? "input"
       : operation === "divide" && y === 0
         ? "division"
-        : !Number.isFinite(result)
+        : !Number.isFinite(result) || Math.abs(result) > Number.MAX_SAFE_INTEGER
           ? "overflow"
           : null;
     setError(nextError);
@@ -437,8 +439,8 @@ export function ToolsDemo({ lang, step }: DemoProps) {
                         "Dělení nulou není povoleno.",
                       )
                     : l(
-                        "The result is too large. Try smaller values or a larger divisor.",
-                        "Výsledek je příliš velký. Zkus menší hodnoty nebo větší dělitel.",
+                        "The result is too large or exceeds integer precision. Try smaller values or a larger divisor.",
+                        "Výsledek je příliš velký nebo přesahuje přesnost celých čísel. Zkus menší hodnoty nebo větší dělitel.",
                       ),
                 lang,
               )}
@@ -593,7 +595,7 @@ export function ReasoningDemo({ lang, step }: DemoProps) {
       <details className="demo-details">
         <summary>{text(l("Steps & limits", "Postup a omezení"), lang)}</summary>
       <ol className="reasoning-steps">
-        {stages.map((line, i) => (
+        {stages.slice(0, step === 0 ? 2 : stages.length).map((line, i) => (
           <li className={visible > i || step > 0 && i < 2 ? "visible-step" : ""} key={i}>
             <span className={`circle color-${i}`}>{i + 1}</span>
             <span>

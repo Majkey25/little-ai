@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   groups,
   lessons,
@@ -210,17 +210,43 @@ export function Library({ lang }: { lang: Lang }) {
   );
 }
 
-function GameFrame({ url, lang }: { url: string; lang: Lang }) {
+function GameFrame({ url, lang, motion }: { url: string; lang: Lang; motion: boolean }) {
   const [ready, setReady] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const frame = useRef<HTMLIFrameElement>(null);
+  const initialUrl = useRef(url).current;
+  const origin = new URL(initialUrl).origin;
+  useLayoutEffect(() => {
+    const timeout = window.setTimeout(() => setFailed(true), 15000);
+    const receive = (event: MessageEvent) => {
+      if (event.source !== frame.current?.contentWindow || event.origin !== origin ||
+        event.data?.type !== "little-clip-factory:ready") return;
+      setReady(true);
+      setFailed(false);
+      window.clearTimeout(timeout);
+    };
+    window.addEventListener("message", receive);
+    return () => {
+      window.removeEventListener("message", receive);
+      window.clearTimeout(timeout);
+    };
+  }, [origin]);
+  useEffect(() => {
+    if (!ready) return;
+    frame.current?.contentWindow?.postMessage({ type: "little-ai:preferences", lang, motion }, origin);
+  }, [ready, lang, motion, origin]);
   return (
     <>
       {!ready && (
         <p role="status">
-          {text(l("Loading the factory…", "Načítám továrnu…"), lang)}
+          {text(failed
+            ? l("The factory has not started. Open the full game or reload.", "Továrna se nespustila. Otevři celou hru nebo obnov stránku.")
+            : l("Loading the factory…", "Načítám továrnu…"), lang)}
         </p>
       )}
       <iframe
-        src={url}
+        ref={frame}
+        src={initialUrl}
         title={text(
           l(
             "Little Clip Factory educational game",
@@ -229,7 +255,6 @@ function GameFrame({ url, lang }: { url: string; lang: Lang }) {
           lang,
         )}
         className="game-frame"
-        onLoad={() => setReady(true)}
         sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
       />
     </>
@@ -275,7 +300,7 @@ export function GamePage({ lang, motion }: { lang: Lang; motion: boolean }) {
           lang,
         )}
       </p>
-      <GameFrame key={url} url={url} lang={lang} />
+      <GameFrame url={url} lang={lang} motion={motion} />
       <div className="game-links">
         <a href="#/alignment">
           {text(

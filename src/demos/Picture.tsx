@@ -62,21 +62,31 @@ export function AgentsDemo({ lang, step }: DemoProps) {
         <>
           <div className="story-stage capability-stage">
             <div className="capability-map">
-            {roles.map((role, i) => (
-              <div key={i}>
-                <span>{text(role, lang)}</span>
-                <div className="probability-track">
-                  <i
-                    style={{
-                      width: `${i === 0 ? skill : (skill * breadth) / 100}%`,
-                      background: ["#7273ed", "#75bd9c", "#e79c77", "#d5b549"][
-                        i
-                      ],
-                    }}
-                  />
+            {roles.map((role, i) => {
+              const score = i === 0 ? skill : (skill * breadth) / 100;
+              return (
+                <div key={i}>
+                  <span>{text(role, lang)}</span>
+                  <div
+                    className="probability-track"
+                    role="meter"
+                    aria-label={`${text(role, lang)}: ${text(l("Illustrative score", "Ilustrační skóre"), lang)}`}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuenow={score}
+                  >
+                    <i
+                      style={{
+                        width: `${score}%`,
+                        background: ["#7273ed", "#75bd9c", "#e79c77", "#d5b549"][
+                          i
+                        ],
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
             </div>
           </div>
           <div className="story-controls demo-controls">

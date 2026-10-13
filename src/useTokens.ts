@@ -6,22 +6,27 @@ export function useTokens(
   encoding: Encoding = "cl100k_base",
   details = true,
 ) {
-  const [result, setResult] = useState<TokenResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [completed, setCompleted] = useState<{
+    input: string;
+    encoding: Encoding;
+    details: boolean;
+    response: TokenResponse;
+  } | null>(null);
+  const [failure, setFailure] = useState<TokenResponse | null>(null);
   const worker = useRef<Worker | null>(null);
   const counter = useRef(0);
+  const submitted = useRef({ input, encoding, details });
   useEffect(() => {
     const fail = () => {
       worker.current?.terminate();
       worker.current = null;
-      setResult({
+      setFailure({
         request: counter.current,
         ids: [],
         pieces: [],
         bytes: [],
         error: "Tokenizer worker could not load.",
       });
-      setLoading(false);
     };
     let instance: Worker;
     try {
@@ -39,8 +44,7 @@ export function useTokens(
         worker.current === instance &&
         event.data.request === counter.current
       ) {
-        setResult(event.data);
-        setLoading(false);
+        setCompleted({ ...submitted.current, response: event.data });
       }
     };
     instance.onerror = () => {
@@ -54,7 +58,7 @@ export function useTokens(
   useEffect(() => {
     if (!worker.current) return;
     counter.current += 1;
-    setLoading(true);
+    submitted.current = { input, encoding, details };
     worker.current.postMessage({
       request: counter.current,
       input,
@@ -62,5 +66,10 @@ export function useTokens(
       details,
     } satisfies TokenRequest);
   }, [input, encoding, details]);
-  return { result, loading };
+  const current = completed?.input === input &&
+    completed.encoding === encoding && completed.details === details;
+  return {
+    result: failure ?? (current ? completed.response : null),
+    loading: !failure && !current,
+  };
 }

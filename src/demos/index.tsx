@@ -1,4 +1,4 @@
-import { Component, lazy, Suspense, type ComponentType, type ReactNode } from "react";
+import { Component, lazy, Suspense, useEffect, type ComponentType, type ReactNode } from "react";
 import { l, text, type Lang } from "../content";
 import type { DemoProps } from "../components";
 
@@ -23,12 +23,15 @@ const demos: Record<string, ComponentType<DemoProps>> = {
 };
 
 class DemoBoundary extends Component<
-  { lang: Lang; children: ReactNode },
+  { lang: Lang; children: ReactNode; onReady: (ready: boolean) => void },
   { failed: boolean }
 > {
   state = { failed: false };
   static getDerivedStateFromError() {
     return { failed: true };
+  }
+  componentDidCatch() {
+    this.props.onReady(false);
   }
   render() {
     if (!this.state.failed) return this.props.children;
@@ -43,13 +46,21 @@ class DemoBoundary extends Component<
   }
 }
 
-export function Demo({ id, ...props }: DemoProps & { id: string }) {
+function Ready({ onReady, children }: { onReady: (ready: boolean) => void; children: ReactNode }) {
+  useEffect(() => {
+    onReady(true);
+    return () => onReady(false);
+  }, [onReady]);
+  return children;
+}
+
+export function Demo({ id, onReady, ...props }: DemoProps & { id: string; onReady: (ready: boolean) => void }) {
   const Scene = demos[id];
   if (!Scene) return null;
   return (
-    <DemoBoundary key={id} lang={props.lang}>
+    <DemoBoundary key={id} lang={props.lang} onReady={onReady}>
       <Suspense fallback={<p role="status">{text(l("Loading the scene…", "Načítám scénu…"), props.lang)}</p>}>
-        <Scene {...props} />
+        <Ready onReady={onReady}><Scene {...props} /></Ready>
       </Suspense>
     </DemoBoundary>
   );

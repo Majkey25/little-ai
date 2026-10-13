@@ -259,7 +259,7 @@ export function PredictionDemo({ lang, step }: DemoProps) {
   ));
   return (
     <div className={`demo prediction-story story-beat-${step}`}>
-      <div className="sentence">
+      <div className="sentence" role="status" aria-atomic="true">
         <span>{lang === "cs" ? "Praha je" : "Prague is"}</span>
         <span key={choice} className={`next-piece ${step === 2 && choice !== null ? "pop" : ""}`}>{step === 2 && choice !== null ? candidates[choice] : "…"}</span>
       </div>
@@ -360,7 +360,7 @@ export function ContextDemo({ lang, step }: DemoProps) {
         {step !== 0 && editor}
         {step === 0 && budget}
         {step !== 1 && <button className="secondary" disabled={notes.length >= 1000} onClick={addNote}>{text(l("Add a note", "Přidej poznámku"), lang)}</button>}
-        <button className="secondary" onClick={() => setNotes("Praha je hlavní město České republiky.")}>{text(l("Keep relevant evidence", "Ponech relevantní podklad"), lang)}</button>
+        <button className="secondary" onClick={() => setNotes("Praha je hlavní město České republiky.")}>{text(l("Replace notes with the example", "Nahraď poznámky ukázkou"), lang)}</button>
         {step !== 2 && <Slider label={text(l("Reserve output tokens", "Rezervuj tokeny odpovědi"), lang)} value={reserve} min={5} max={50} step={1} onChange={setReserve} />}
         <Note>{text(l("Exact concatenated plain text in cl100k_base. API formatting is excluded. 80 is a teaching limit. Overflow is highlighted; your notes are not erased.", "Přesný spojený text v cl100k_base. Režie API není zahrnuta. 80 je výukový limit. Přebytek se zvýrazní, poznámky se nesmažou."), lang)}</Note>
       </details>

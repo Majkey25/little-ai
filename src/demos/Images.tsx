@@ -1,6 +1,6 @@
 import { useEffect, useId, useMemo, useState } from "react";
 import { l, text } from "../content";
-import { Slider, type DemoProps } from "../components";
+import { Note, Slider, type DemoProps } from "../components";
 import {
   guidedUpdate,
   IMAGE_STEPS,
@@ -125,8 +125,8 @@ export function ImagesDemo({ lang, step, motion = true }: DemoProps) {
   const purpleArrow = `url(#${id}-purple)`;
   const caption = text(
     l(
-      "Teaching toy: noise moves toward a drawn template. No image model runs here.",
-      "Výuková ukázka: šum přibližujeme k nakreslené předloze. Žádný obrazový model tu neběží.",
+      "This animation blends noise into a prepared image.",
+      "Tato animace prolíná šum s připraveným obrázkem.",
     ),
     lang,
   );
@@ -176,7 +176,7 @@ export function ImagesDemo({ lang, step, motion = true }: DemoProps) {
           {text(l("How image generation works", "Jak vzniká obrázek"), lang)}
         </title>
         <desc id={`${id}-description`}>
-          {text(descriptions[step], lang)} {caption}
+          {text(descriptions[step], lang)}
         </desc>
         <defs>
           {["purple", "blue", "orange"].map((name, i) => (
@@ -685,6 +685,7 @@ export function ImagesDemo({ lang, step, motion = true }: DemoProps) {
           />
         )}
       </div>
+      {step > 0 && step < 4 && <Note>{caption}</Note>}
     </div>
   );
 }

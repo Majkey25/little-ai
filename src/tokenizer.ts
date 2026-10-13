@@ -55,7 +55,7 @@ export async function tokenize(message: TokenRequest): Promise<TokenResponse> {
       return { request, ids, pieces: [], bytes: [] };
     }
     const bytes = (loaded.bytes ??= tokenBytes(loaded.ranks));
-    const decoder = new TextDecoder();
+    const decoder = new TextDecoder("utf-8", { ignoreBOM: true });
     return {
       request,
       ids,

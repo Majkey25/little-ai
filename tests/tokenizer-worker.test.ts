@@ -9,6 +9,9 @@ test("count-only requests keep exact IDs without inspector details", async () =>
       "Ahoj 👋!",
       "  hello\nworld",
       "<|endoftext|>",
+      "\uFEFF",
+      "\uFEFFusing",
+      "A\uFEFFB",
       "",
     ]) {
       const [count, inspected] = await Promise.all([
@@ -34,6 +37,12 @@ test("count-only requests keep exact IDs without inspector details", async () =>
       );
       if (input.startsWith("Praha")) {
         assert.equal(count.ids.length, encoding === "cl100k_base" ? 19 : 11);
+      }
+      if (input.includes("\uFEFF")) {
+        assert.equal(inspected.pieces.join(""), input);
+      }
+      if (input === "Ahoj 👋!") {
+        assert.ok(inspected.pieces.some((piece) => piece.includes("�")));
       }
     }
   }
