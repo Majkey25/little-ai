@@ -518,6 +518,15 @@ export function ImagesDemo({ lang, step, motion = true }: DemoProps) {
             <line
               x1="140"
               y1="290"
+              x2={guidedEnd[0]}
+              y2={guidedEnd[1]}
+              stroke="#7560c7"
+              strokeWidth="7"
+              markerEnd={purpleArrow}
+            />
+            <line
+              x1="140"
+              y1="290"
               x2="238"
               y2="255"
               stroke="#638db8"
@@ -539,19 +548,10 @@ export function ImagesDemo({ lang, step, motion = true }: DemoProps) {
               strokeWidth="2"
               strokeDasharray="5 5"
             />
-            <line
-              x1="140"
-              y1="290"
-              x2={guidedEnd[0]}
-              y2={guidedEnd[1]}
-              stroke="#7560c7"
-              strokeWidth="7"
-              markerEnd={purpleArrow}
-            />
             <circle cx="140" cy="290" r="7" fill="#3c3457" />
             {[
-              l("Without prompt", "Bez zadání"),
-              l("With prompt", "Se zadáním"),
+              l("u · No prompt", "u · Bez zadání"),
+              l("c · With prompt", "c · Se zadáním"),
               l("Guided update", "Řízená úprava"),
             ].map((label, i) => (
               <g key={i}>
@@ -566,10 +566,10 @@ export function ImagesDemo({ lang, step, motion = true }: DemoProps) {
                 </text>
               </g>
             ))}
-            <text x="280" y="376" textAnchor="middle" fontSize="30">
+            <text x="280" y="364" textAnchor="middle" fontSize="30">
               u + g × (c − u)
             </text>
-            <text x="280" y="412" textAnchor="middle" fontSize="28">
+            <text x="280" y="412" textAnchor="middle" fontSize="26">
               {text(
                 l("Illustrative update vectors", "Znázorněné vektory úprav"),
                 lang,

@@ -9,11 +9,11 @@ export function EmbeddingsDemo({ lang, step }: DemoProps) {
   const [y, setY] = useState(0.2);
   const [selected, setSelected] = useState(0);
   const points = [
-    { name: l("Prague", "Praha"), v: [0.92, 0.18] },
-    { name: l("Paris", "Paříž"), v: [0.85, 0.3] },
-    { name: l("Berlin", "Berlín"), v: [0.72, 0.42] },
-    { name: l("Cake", "Koláč"), v: [0.12, 0.89] },
-    { name: l("Bread", "Chléb"), v: [0.28, 0.78] },
+    { name: l("Prague", "Praha"), v: [0.92, 0.18], labelY: 16 },
+    { name: l("Paris", "Paříž"), v: [0.85, 0.3], labelY: 7 },
+    { name: l("Berlin", "Berlín"), v: [0.72, 0.42], labelY: -2 },
+    { name: l("Cake", "Koláč"), v: [0.12, 0.89], labelY: -7 },
+    { name: l("Bread", "Chléb"), v: [0.28, 0.78], labelY: 7 },
   ];
   const ranked = points
     .map((point) => ({ ...point, score: cosine([x, y], point.v) }))
@@ -64,21 +64,23 @@ export function EmbeddingsDemo({ lang, step }: DemoProps) {
                 fill="none"
               />
               <circle cx={45 + point.v[0] * 255} cy={330 - point.v[1] * 255} r={closest ? 12 : 8} fill={i > 2 ? "#79c5a3" : "#9c92e9"} />
-              <text className="svg-label" x={59 + point.v[0] * 255} y={335 - point.v[1] * 255} fill="#46445e" fontSize="20">
-                {text(point.name, lang)}
-              </text>
             </g>
           );
         })}
         {step > 0 && (
           <g>
             <path className="query-vector" d={`M45 330L${45 + x * 255} ${330 - y * 255}`} stroke="#7273ed" strokeWidth="3" fill="none" markerEnd="url(#vector-arrow)" />
-            <circle cx={45 + x * 255} cy={330 - y * 255} r="10" fill="#7273ed" stroke="white" strokeWidth="3" />
+            <circle cx={45 + x * 255} cy={330 - y * 255} r="12" fill="none" stroke="#7273ed" strokeWidth="2" />
           </g>
         )}
+        {points.map((point, i) => (step > 0 || selected === i) && (
+          <text key={point.name.en} className="svg-label" x={59 + point.v[0] * 255} y={330 - point.v[1] * 255 + point.labelY} fill="#46445e" fontSize="20" paintOrder="stroke" stroke="#ece9ff" strokeWidth="4" strokeLinejoin="round" opacity={step === 2 && point.name.en !== ranked[0].name.en ? 0.35 : 1}>
+            {text(point.name, lang)}
+          </text>
+        ))}
         <g className="svg-label" fill="#66677e" fontSize="20">
           <text x="315" y="335">x</text>
-          <text x="25" y="40">y</text>
+          <text x="64" y="78">y</text>
           <text x="45" y="368" textAnchor="middle">0</text>
           <text x="300" y="368" textAnchor="middle">1</text>
           <text x="32" y="81" textAnchor="end">1</text>
@@ -145,8 +147,8 @@ export function AttentionDemo({ lang, step }: DemoProps) {
             </g>
           ))}
           <circle cx="350" cy="144" r="53" fill="#f7dc7b" />
-          <text className="svg-label" x="350" y="135" textAnchor="middle" fill="#46445e" fontSize="20">Q</text>
-          <text className="svg-label" x="350" y="161" textAnchor="middle" fill="#46445e" fontSize="20">{words[position]}</text>
+          <text className="svg-label" x="350" y="130" textAnchor="middle" fill="#46445e" fontSize="20">Q</text>
+          <text className="svg-label" x="350" y="164" textAnchor="middle" fill="#46445e" fontSize="20">{words[position]}</text>
         </svg>
       ) : step === 1 ? (
         <div className="attention-weights story-visual">
@@ -168,10 +170,10 @@ export function AttentionDemo({ lang, step }: DemoProps) {
               <g key={i} opacity={row[i] === 0 ? 0.25 : 1}>
                 {row[i] > 0 && <path className="story-flow" pathLength="100" d={`M${45 + value[0] * 190} ${245 - value[1] * 190}L${45 + mixed[0] * 190} ${245 - mixed[1] * 190}`} stroke="#9c92e9" strokeWidth={1 + row[i] * 8} fill="none" />}
                 <circle cx={45 + value[0] * 190} cy={245 - value[1] * 190} r="8" fill="#79c5a3" />
-                <text className="svg-label" x={57 + value[0] * 190} y={239 - value[1] * 190} fill="#46445e" fontSize="20">V{i + 1}</text>
+                <text className="svg-label" x={65 + value[0] * 190} y={239 - value[1] * 190} fill="#46445e" fontSize="20">V{i + 1}</text>
               </g>
             ))}
-            <circle cx={45 + mixed[0] * 190} cy={245 - mixed[1] * 190} r="13" fill="#7273ed" stroke="white" strokeWidth="3" />
+            <circle cx={45 + mixed[0] * 190} cy={245 - mixed[1] * 190} r="13" fill="none" stroke="#7273ed" strokeWidth="3" />
             <text className="svg-label" x="270" y="270" fill="#66677e" fontSize="18">x</text>
             <text className="svg-label" x="25" y="30" fill="#66677e" fontSize="18">y</text>
             <g className="svg-label" fill="#66677e" fontSize="20">
