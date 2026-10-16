@@ -43,3 +43,5 @@ Little AI is a static bilingual educational frontend. Use these notes with the c
 20. **Language persistence:** `src/App.tsx` checks a valid `?lang=` value before the `little-ai-language` storage preference. An explicit language choice updates that parameter when present.
 
 21. **Animations and reduced motion:** Preserve the manual animation control and system reduced-motion handling in `src/App.tsx`. Related styles include `.motion-off` and the reduced-motion media query in `src/styles.css`.
+
+22. **Keyboard and accessible controls:** Preserve the skip link, focus management, and chapter dialog's Escape and Tab handling. Keep controls labeled and status messages accessible.
