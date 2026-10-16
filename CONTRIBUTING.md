@@ -37,3 +37,5 @@ Little AI is a static bilingual educational frontend. Use these notes with the c
 17. **Context and retrieval distinctions:** The retrieval demos supply evidence to context. Keep this separate from changing model weights or claiming that every model performs vector search.
 
 18. **Prepared tool and search simulations:** The flows in `src/demos/Beyond.tsx` use prepared examples and results. Preserve their simulation labels rather than implying a live external service.
+
+19. **Image chapter limitations:** `src/demos/Images.tsx` and `src/imageMath.ts` illustrate movement toward prepared pixel templates. This is deterministic teaching code, not a trained diffusion sampler.
