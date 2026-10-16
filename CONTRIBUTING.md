@@ -13,3 +13,5 @@ Little AI is a static bilingual educational frontend. Use these notes with the c
 5. **Localized content helpers:** Use `Lang`, `Localized`, `l(en, cs)`, and `text(value, lang)` from `src/content.ts`. Keep user-facing content available in English and Czech.
 
 6. **Lesson metadata:** Follow the `Lesson` type in `src/content.ts`. Keep its identity, group, localized copy, scenes, takeaway, details, and source IDs consistent.
+
+7. **Demo registration:** Register chapter components in the `demos` mapping in `src/demos/index.tsx`. `Demo` selects a component by lesson ID and returns `null` for an unknown ID.
