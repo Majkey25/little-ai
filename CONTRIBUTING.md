@@ -41,3 +41,5 @@ Little AI is a static bilingual educational frontend. Use these notes with the c
 19. **Image chapter limitations:** `src/demos/Images.tsx` and `src/imageMath.ts` illustrate movement toward prepared pixel templates. This is deterministic teaching code, not a trained diffusion sampler.
 
 20. **Language persistence:** `src/App.tsx` checks a valid `?lang=` value before the `little-ai-language` storage preference. An explicit language choice updates that parameter when present.
+
+21. **Animations and reduced motion:** Preserve the manual animation control and system reduced-motion handling in `src/App.tsx`. Related styles include `.motion-off` and the reduced-motion media query in `src/styles.css`.
