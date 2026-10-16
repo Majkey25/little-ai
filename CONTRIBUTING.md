@@ -11,3 +11,5 @@ Little AI is a static bilingual educational frontend. Use these notes with the c
 4. **Source map:** Start with `src/main.tsx` and `src/App.tsx`. Page shells live in `src/Pages.tsx`, lesson controls in `src/Lesson.tsx`, and chapter visuals in `src/demos/`.
 
 5. **Localized content helpers:** Use `Lang`, `Localized`, `l(en, cs)`, and `text(value, lang)` from `src/content.ts`. Keep user-facing content available in English and Czech.
+
+6. **Lesson metadata:** Follow the `Lesson` type in `src/content.ts`. Keep its identity, group, localized copy, scenes, takeaway, details, and source IDs consistent.
