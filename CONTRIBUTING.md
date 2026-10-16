@@ -25,3 +25,5 @@ Little AI is a static bilingual educational frontend. Use these notes with the c
 11. **Training versus inference:** `train(...)` and `predict(...)` in `src/math.ts` demonstrate different operations. Keep learning weights distinct from running a model with existing weights.
 
 12. **Tokenization encodings:** `src/tokenizer.ts` supports `cl100k_base` and `o200k_base`. Keep documentation consistent with those encodings and the controls in `src/demos/Foundations.tsx`.
+
+13. **Plain-text token count limits:** These counts cover displayed text, not complete API message formatting or hidden reasoning. `src/tokenizer.ts` rejects inputs whose JavaScript `length` exceeds 3000.
