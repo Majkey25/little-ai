@@ -21,3 +21,5 @@ Little AI is a static bilingual educational frontend. Use these notes with the c
 9. **Original source attribution:** Add educational references to the `sources` entries in `src/content.ts`. Preserve original summaries and the external works' credits described in `README.md`.
 
 10. **Hand-designed embeddings:** Treat `documents` and `queryVectors` in `src/math.ts` as curated teaching data. Do not present them as outputs from a trained embedding model.
+
+11. **Training versus inference:** `train(...)` and `predict(...)` in `src/math.ts` demonstrate different operations. Keep learning weights distinct from running a model with existing weights.
