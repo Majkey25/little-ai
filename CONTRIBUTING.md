@@ -47,3 +47,5 @@ Little AI is a static bilingual educational frontend. Use these notes with the c
 22. **Keyboard and accessible controls:** Preserve the skip link, focus management, and chapter dialog's Escape and Tab handling. Keep controls labeled and status messages accessible.
 
 23. **Embedded game ownership:** Little Clip Factory remains a separate project with its own save. `src/Pages.tsx` validates the iframe's readiness message before sending language and motion preferences.
+
+24. **Tests, build, and publication:** Run `npm test` and `npm run build` before claiming readiness. The existing Pages workflow tests, builds, uploads `dist`, and deploys on pushes to `main`.
