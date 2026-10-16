@@ -31,3 +31,5 @@ Little AI is a static bilingual educational frontend. Use these notes with the c
 14. **Tokenizer worker boundary:** `src/useTokens.ts` creates a module Web Worker from `src/tokenizer.worker.ts`. Keep heavy tokenization behind that browser worker boundary.
 
 15. **Stale tokenizer replies:** `src/useTokens.ts` accepts only the current request ID. The worker keeps the newest pending request, but does not cancel tokenization already running.
+
+16. **Token byte display:** `src/tokenBytes.ts` reconstructs token bytes for inspection in `src/demos/Foundations.tsx`. A token's bytes may be only part of a UTF-8 character.
