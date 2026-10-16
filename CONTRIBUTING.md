@@ -15,3 +15,5 @@ Little AI is a static bilingual educational frontend. Use these notes with the c
 6. **Lesson metadata:** Follow the `Lesson` type in `src/content.ts`. Keep its identity, group, localized copy, scenes, takeaway, details, and source IDs consistent.
 
 7. **Demo registration:** Register chapter components in the `demos` mapping in `src/demos/index.tsx`. `Demo` selects a component by lesson ID and returns `null` for an unknown ID.
+
+8. **Captions and technical details:** Put narration in `lesson.scenes[*].body`. `src/Lesson.tsx` renders captions separately from the details and sources panel.
