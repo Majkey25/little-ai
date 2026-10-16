@@ -35,3 +35,5 @@ Little AI is a static bilingual educational frontend. Use these notes with the c
 16. **Token byte display:** `src/tokenBytes.ts` reconstructs token bytes for inspection in `src/demos/Foundations.tsx`. A token's bytes may be only part of a UTF-8 character.
 
 17. **Context and retrieval distinctions:** The retrieval demos supply evidence to context. Keep this separate from changing model weights or claiming that every model performs vector search.
+
+18. **Prepared tool and search simulations:** The flows in `src/demos/Beyond.tsx` use prepared examples and results. Preserve their simulation labels rather than implying a live external service.
