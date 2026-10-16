@@ -19,3 +19,5 @@ Little AI is a static bilingual educational frontend. Use these notes with the c
 8. **Captions and technical details:** Put narration in `lesson.scenes[*].body`. `src/Lesson.tsx` renders captions separately from the details and sources panel.
 
 9. **Original source attribution:** Add educational references to the `sources` entries in `src/content.ts`. Preserve original summaries and the external works' credits described in `README.md`.
+
+10. **Hand-designed embeddings:** Treat `documents` and `queryVectors` in `src/math.ts` as curated teaching data. Do not present them as outputs from a trained embedding model.
