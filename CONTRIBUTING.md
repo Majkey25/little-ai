@@ -29,3 +29,5 @@ Little AI is a static bilingual educational frontend. Use these notes with the c
 13. **Plain-text token count limits:** These counts cover displayed text, not complete API message formatting or hidden reasoning. `src/tokenizer.ts` rejects inputs whose JavaScript `length` exceeds 3000.
 
 14. **Tokenizer worker boundary:** `src/useTokens.ts` creates a module Web Worker from `src/tokenizer.worker.ts`. Keep heavy tokenization behind that browser worker boundary.
+
+15. **Stale tokenizer replies:** `src/useTokens.ts` accepts only the current request ID. The worker keeps the newest pending request, but does not cancel tokenization already running.
