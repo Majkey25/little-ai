@@ -9,6 +9,7 @@ import {
   type Lang,
 } from "./content";
 import { Arrow, Icon, Network } from "./components";
+import { isGameReady } from "./gameFrame";
 
 export function Home({ lang }: { lang: Lang }) {
   return (
@@ -215,12 +216,10 @@ function GameFrame({ url, lang, motion }: { url: string; lang: Lang; motion: boo
   const [failed, setFailed] = useState(false);
   const frame = useRef<HTMLIFrameElement>(null);
   const initialUrl = useRef(url).current;
-  const origin = new URL(initialUrl).origin;
   useLayoutEffect(() => {
     const timeout = window.setTimeout(() => setFailed(true), 15000);
     const receive = (event: MessageEvent) => {
-      if (event.source !== frame.current?.contentWindow || event.origin !== origin ||
-        event.data?.type !== "little-clip-factory:ready") return;
+      if (!isGameReady(event, frame.current?.contentWindow ?? null)) return;
       setReady(true);
       setFailed(false);
       window.clearTimeout(timeout);
@@ -230,11 +229,12 @@ function GameFrame({ url, lang, motion }: { url: string; lang: Lang; motion: boo
       window.removeEventListener("message", receive);
       window.clearTimeout(timeout);
     };
-  }, [origin]);
+  }, []);
   useEffect(() => {
     if (!ready) return;
-    frame.current?.contentWindow?.postMessage({ type: "little-ai:preferences", lang, motion }, origin);
-  }, [ready, lang, motion, origin]);
+    // Sandboxed documents have an opaque origin; only these public preferences cross it.
+    frame.current?.contentWindow?.postMessage({ type: "little-ai:preferences", lang, motion }, "*");
+  }, [ready, lang, motion]);
   return (
     <>
       {!ready && (
@@ -255,7 +255,7 @@ function GameFrame({ url, lang, motion }: { url: string; lang: Lang; motion: boo
           lang,
         )}
         className="game-frame"
-        sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+        sandbox="allow-scripts allow-popups"
       />
     </>
   );
@@ -283,6 +283,12 @@ export function GamePage({ lang, motion }: { lang: Lang; motion: boolean }) {
           <Arrow />
         </a>
       </div>
+      <p role="note">
+        {text(l(
+          "Embedded progress is temporary. Open the full game to keep progress or continue an existing save.",
+          "Postup ve vložené hře se neukládá. Celou hru otevři pro ukládání postupu nebo pokračování v uložené hře.",
+        ), lang)}
+      </p>
       <p className="game-credit">
         {text(l("Inspired by", "Inspirováno hrou"), lang)}{" "}
         <a

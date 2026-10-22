@@ -47,7 +47,7 @@ npm run build
 npm run preview
 ```
 
-To play the embedded game locally, run its separate repository on port 4174. Production embeds its GitHub Pages URL.
+To play the embedded game locally, run `npm run build` and then `npm run preview` in its separate repository on port 4174. Its source-serving dev server rejects the opaque iframe origin. Rebuild and reload after game changes. Production embeds its GitHub Pages URL.
 
 ## Static architecture
 
@@ -57,7 +57,7 @@ The guide uses system fonts and native SVG diagrams. It has no mascot bitmap or 
 
 ## Privacy and accessibility
 
-No accounts, analytics, API keys or backend. Text entered into examples stays in the browser. The guide stores only its language preference. An older `little-ai-progress` value is left untouched and is not used for tracking. The separate game has its own local save. External source links open only when selected.
+No accounts, analytics, API keys or backend. Text entered into examples stays in the browser. The guide stores only its language preference. An older `little-ai-progress` value is left untouched and is not used for tracking. The embedded game runs in an opaque-origin sandbox and keeps progress only until that page closes. Open the full game to use its existing local save; embedding does not read, change or migrate that save. Only language and animation preferences cross the frame's message interface. External source links open only when selected.
 
 Keyboard controls, focus indicators, labeled inputs, phone layouts, pauseable explanations and reduced-motion support are included. The animation toggle also controls the embedded game. Native SVG diagrams keep text selectable.
 
